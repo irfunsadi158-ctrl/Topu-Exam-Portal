@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMC Aspirant - Topu's Exam Portal</title>
+    <style>
+        :root { --primary: #1a73e8; --success: #34a853; --danger: #d93025; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
+        
+        /* Branding & Header */
+        .branding { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .branding h1 { margin: 0; color: var(--primary); font-size: 24px; }
+        .creator { font-size: 14px; color: #5f6368; font-weight: bold; font-style: italic; }
+
+        textarea { width: 100%; height: 120px; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; box-sizing: border-box; font-size: 14px; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: #eee; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .tab-btn.active { background: var(--primary); color: white; }
+        
+        .input-group { margin-bottom: 15px; background: #f1f3f4; padding: 15px; border-radius: 12px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
+        input[type="number"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .hidden { display: none; }
+
+        /* Exam UI */
+        .header-box { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px; color: var(--danger); }
+        .timer-bg { width: 100%; background: #eee; height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        #timer-fill { height: 100%; background: var(--danger); width: 100%; transition: width 1s linear; }
+        
+        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #fff; border: 2px solid #e8eaed; border-radius: 12px; text-align: left; font-size: 16px; cursor: pointer; }
+        .correct { background: #e6f4ea !important; border-color: var(--success) !important; color: #137333; font-weight: bold; }
+        .wrong { background: #fce8e6 !important; border-color: var(--danger) !important; color: #a50e0e; }
+        
+        #exp-box { background: #e8f0fe; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); margin-top: 15px; line-height: 1.5; font-size: 15px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; }
+        
+        .footer-credit { text-align: center; margin-top: 20px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="branding">
+        <h1>MCQ Exam Portal</h1>
+        <div class="creator">Created by Topu</div>
+    </div>
+
+    <div id="setup">
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-smart" onclick="switchTab('smart')">Smart Text</button>
+            <button class="tab-btn" id="tab-json" onclick="switchTab('json')">Direct JSON</button>
+        </div>
+
+        <div id="smart-section">
+            <label>Google Lens থেকে টেক্সট পেস্ট করুন:</label>
+            <textarea id="raw-text" placeholder="১. প্রশ্ন? ক) উত্তর খ) উত্তর..."></textarea>
+            <button class="btn" style="background:var(--success)" onclick="smartConvert()">অটো-জেনারেট JSON</button>
+        </div>
+
+        <div id="json-section" class="hidden">
+            <label>JSON কোড এডিট করুন:</label>
+            <textarea id="json-input" placeholder="এখানে JSON কোড থাকবে..."></textarea>
+        </div>
+
+        <div class="input-group">
+            <label>সময় (প্রতি প্রশ্ন): <input type="number" id="user-time" value="30"> সেকেন্ড</label>
+            <div class="checkbox-row">
+                <input type="checkbox" id="neg-on" onchange="document.getElementById('neg-val-div').classList.toggle('hidden')"> 
+                <label style="margin:0">নেগেটিভ মার্কিং চালু করুন</label>
+            </div>
+            <div id="neg-val-div" class="hidden" style="margin-top:10px;">
+                <label>কাটা যাবে (প্রতি ভুল): <input type="number" id="neg-val" step="0.05" value="0.25"></label>
+            </div>
+        </div>
+
+        <button class="btn" onclick="startExam()">পরীক্ষা শুরু করুন</button>
+    </div>
+
+    <div id="exam" class="hidden">
+        <div class="header-box">
+            <span id="progress-text">প্রশ্ন ১/০</span>
+            <span id="timer-text">-- সে.</span>
+        </div>
+        <div class="timer-bg"><div id="timer-fill"></div></div>
+        <h3 id="question-display"></h3>
+        <div id="options-display"></div>
+        <div id="exp-box" class="hidden"><strong>ব্যাখ্যা:</strong> <span id="exp-text"></span></div>
+        <button id="next-btn" class="btn hidden" onclick="goNext()" style="background:#5f6368">পরবর্তী প্রশ্ন</button>
+    </div>
+
+    <div id="result" class="hidden">
+        <h2>রেজাল্ট সামারি</h2>
+        <div id="score-card" style="text-align:center; background:#f1f3f4; padding:20px; border-radius:15px; margin-bottom:20px;">
+            <p>সঠিক: <span id="res-corr" style="color:green">0</span> | ভুল: <span id="res-wrong" style="color:red">0</span></p>
+            <p id="res-neg-p" class="hidden">নেগেটিভ: -<span id="res-neg">0</span></p>
+            <h1 id="res-total" style="font-size: 40px; margin: 10px 0;">0</h1>
+            <p style="margin:0; color:#777">অর্জিত নম্বর</p>
+        </div>
+        <div id="final-summary" style="overflow-x:auto"></div>
+        <button class="btn" onclick="location.reload()">নতুন পরীক্ষা শুরু করুন</button>
+    </div>
+
+    <div class="footer-credit">© 2026 | Topu - All Rights Reserved</div>
+</div>
+
+<script>
+let questions = [], index = 0, scoreCorr = 0, scoreWrong = 0, logs = [];
+let timerObj, maxTime = 30, timeLeft = 30, negVal = 0;
+
+function switchTab(t) {
+    document.getElementById('smart-section').classList.toggle('hidden', t === 'json');
+    document.getElementById('json-section').classList.toggle('hidden', t === 'smart');
+    document.getElementById('tab-smart').classList.toggle('active', t === 'smart');
+    document.getElementById('tab-json').classList.toggle('active', t === 'json');
+}
+
+function smartConvert() {
+    const raw = document.getElementById('raw-text').value;
+    if(!raw) return alert("টেক্সট দিন!");
+    const lines = raw.split('\n').filter(l => l.trim().length > 5);
+    let autoJSON = [];
+    for(let i=0; i<lines.length; i++) {
+        if(lines[i].length > 15) {
+            let opts = ["ক", "খ", "গ", "ঘ"];
+            if(lines[i+1] && lines[i+1].includes('খ)')) {
+                opts = lines[i+1].split(/[কখগঘa-d][\)\.]/).map(s => s.trim()).filter(s => s.length > 0);
+                i++;
+            }
+            autoJSON.push({ q: lines[i], options: opts.slice(0,4), correct: 0, explanation: "ব্যাখ্যা এখানে দিন।" });
+        }
+    }
+    document.getElementById('json-input').value = JSON.stringify(autoJSON, null, 2);
+    alert("JSON তৈরি হয়েছে!");
+    switchTab('json');
+}
+
+function startExam() {
+    try {
+        questions = JSON.parse(document.getElementById('json-input').value);
+        maxTime = parseInt(document.getElementById('user-time').value) || 30;
+        if(document.getElementById('neg-on').checked) negVal = parseFloat(document.getElementById('neg-val').value);
+        document.getElementById('setup').classList.add('hidden');
+        document.getElementById('exam').classList.remove('hidden');
+        loadQuestion();
+    } catch(e) { alert("JSON ঠিকমতো দিন!"); }
+}
+
+function loadQuestion() {
+    const q = questions[index];
+    document.getElementById('progress-text').innerText = `প্রশ্ন ${index+1}/${questions.length}`;
+    document.getElementById('question-display').innerText = q.q;
+    document.getElementById('exp-box').classList.add('hidden');
+    document.getElementById('next-btn').classList.add('hidden');
+    const container = document.getElementById('options-display');
+    container.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const b = document.createElement('button');
+        b.className = 'option-btn';
+        b.innerText = opt;
+        b.onclick = () => checkAns(i, b);
+        container.appendChild(b);
+    });
+    timeLeft = maxTime;
+    runTimer();
+}
+
+function runTimer() {
+    clearInterval(timerObj);
+    updateUI();
+    timerObj = setInterval(() => {
+        timeLeft--;
+        updateUI();
+        if(timeLeft <= 0) { clearInterval(timerObj); finishStep(null, false); }
+    }, 1000);
+}
+
+function updateUI() {
+    document.getElementById('timer-text').innerText = timeLeft + " সে.";
+    document.getElementById('timer-fill').style.width = (timeLeft/maxTime)*100 + "%";
+}
+
+function checkAns(s, b) {
+    clearInterval(timerObj);
+    const c = questions[index].correct;
+    const all = document.querySelectorAll('.option-btn');
+    all.forEach(btn => btn.disabled = true);
+    let isC = (s === c);
+    if(isC) { b.classList.add('correct'); scoreCorr++; }
+    else { b.classList.add('wrong'); all[c].classList.add('correct'); scoreWrong++; }
+    finishStep(s === null ? "সময় শেষ" : questions[index].options[s], isC);
+}
+
+function finishStep(uA, isC) {
+    const q = questions[index];
+    document.getElementById('exp-text').innerText = q.explanation || "ব্যাখ্যা নেই।";
+    document.getElementById('exp-box').classList.remove('hidden');
+    document.getElementById('next-btn').classList.remove('hidden');
+    logs.push({ q: q.q, cA: q.options[q.correct], uA: uA, isC: isC, exp: q.explanation });
+}
+
+function goNext() {
+    index++;
+    if(index < questions.length) loadQuestion();
+    else showResult();
+}
+
+function showResult() {
+    document.getElementById('exam').classList.add('hidden');
+    document.getElementById('result').classList.remove('hidden');
+    let nT = scoreWrong * negVal;
+    document.getElementById('res-corr').innerText = scoreCorr;
+    document.getElementById('res-wrong').innerText = scoreWrong;
+    if(negVal > 0) {
+        document.getElementById('res-neg-p').classList.remove('hidden');
+        document.getElementById('res-neg').innerText = nT.toFixed(2);
+    }
+    document.getElementById('res-total').innerText = (scoreCorr - nT).toFixed(2);
+    let h = '<table><tr><th>প্রশ্ন</th><th>আপনার উত্তর</th><th>সঠিক উত্তর</th><th>ব্যাখ্যা</th></tr>';
+    logs.forEach(l => {
+        h += `<tr><td>${l.q}</td><td style="color:${l.isC?'green':'red'}">${l.uA}</td><td>${l.cA}</td><td>${l.exp}</td></tr>`;
+    });
+    document.getElementById('final-summary').innerHTML = h + '</table>';
+}
+</script>
+</body>
+</html>
