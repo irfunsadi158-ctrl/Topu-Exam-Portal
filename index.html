@@ -3,305 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topu's Advanced Exam Portal</title>
+    <title>Advanced Exam Portal</title>
     <style>
-        :root { --primary: #1a73e8; --success: #34a853; --danger: #d93025; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
+        :root { --primary: #1a73e8; --success: #34a853; --danger: #d93025; --warning: #f9ab00; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         
-        .branding { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .branding h1 { margin: 0; color: var(--primary); font-size: 24px; }
-        .creator { font-size: 14px; color: #5f6368; font-weight: bold; font-style: italic; }
+        #welcome-screen { position: fixed; width: 100%; height: 100vh; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: 0.8s; }
+        .loader { border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        textarea { width: 100%; height: 120px; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; box-sizing: border-box; font-size: 14px; }
-        
-        .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: #eee; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .container { max-width: 500px; margin: 20px auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .branding { text-align: center; margin-bottom: 30px; }
+        .branding h1 { color: var(--primary); font-size: 28px; margin: 0; }
+        .creator-tag { font-size: 14px; color: #5f6368; font-weight: bold; margin-top: 5px; }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: #f1f3f4; border-radius: 10px; cursor: pointer; font-weight: bold; color: #5f6368; }
         .tab-btn.active { background: var(--primary); color: white; }
-        
-        .input-group { margin-bottom: 15px; background: #f1f3f4; padding: 15px; border-radius: 12px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
-        input[type="number"], select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; margin-bottom: 10px; }
-        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 
-        .btn { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        .hidden { display: none; }
-
-        /* Exam UI */
-        .header-box { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px; align-items: center; }
-        #progress-text { color: #5f6368; }
-        #timer-text { color: var(--danger); font-size: 18px; }
+        .input-card { background: #f8f9fa; padding: 20px; border-radius: 15px; margin-top: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; color: #3c4043; }
+        textarea { width: 100%; height: 120px; padding: 15px; border-radius: 12px; border: 1px solid #dadce0; font-size: 14px; box-sizing: border-box; resize: vertical; }
         
-        .quit-btn { background: #fee; color: var(--danger); border: 1px solid #fcc; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.3s; }
-        .quit-btn:hover { background: var(--danger); color: white; }
+        select, input[type="number"] { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #dadce0; font-size: 15px; background: white; margin-bottom: 15px; box-sizing: border-box; }
 
-        .timer-bg { width: 100%; background: #eee; height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
-        #timer-fill { height: 100%; background: var(--danger); width: 100%; transition: width 1s linear; }
+        .btn-main { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+
+        .sticky-header { position: sticky; top: 0; background: white; padding: 15px; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        #timer-display { background: var(--danger); color: white; padding: 5px 12px; border-radius: 6px; font-weight: bold; }
         
-        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #fff; border: 2px solid #e8eaed; border-radius: 12px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; }
-        .option-btn:hover:not(:disabled) { border-color: var(--primary); background: #f0f7ff; }
+        .ques-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin: 15px 0; }
+        .option-item { display: flex; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 50px; margin: 8px 0; cursor: pointer; transition: 0.2s; }
+        .option-item:hover { background: #f0f7ff; }
+        .option-item input { margin-right: 12px; width: 18px; height: 18px; }
+
+        .poll-option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e8eaed; border-radius: 12px; background: white; cursor: pointer; text-align: left; font-size: 16px; }
         .correct { background: #e6f4ea !important; border-color: var(--success) !important; color: #137333; font-weight: bold; }
         .wrong { background: #fce8e6 !important; border-color: var(--danger) !important; color: #a50e0e; }
-        
-        #exp-box { background: #e8f0fe; padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); margin-top: 15px; line-height: 1.5; font-size: 15px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #f8f9fa; }
-        
-        .footer-credit { text-align: center; margin-top: 20px; font-size: 12px; color: #999; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-item { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
+        .stat-val { font-size: 20px; font-weight: bold; display: block; }
+        .stat-label { font-size: 12px; color: #5f6368; }
+
+        .result-card { background: white; border: 1px solid #e0e0e0; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
+        .res-q { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #202124; }
+        .res-opt { padding: 10px 15px; border-radius: 10px; margin: 5px 0; font-size: 14px; }
+        .res-correct { background: #e6f4ea; color: #137333; border: 1px solid var(--success); }
+        .res-wrong { background: #fce8e6; color: #a50e0e; border: 1px solid var(--danger); }
+        .res-exp { background: #e8f0fe; padding: 12px; border-radius: 10px; margin-top: 10px; font-size: 13px; color: #1967d2; border-left: 4px solid var(--primary); }
+
+        .hidden { display: none; }
+        .quote-footer { text-align: center; margin-top: 30px; font-size: 13px; color: #70757a; font-style: italic; border-top: 1px solid #eee; padding-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div id="welcome-screen">
+    <div class="loader"></div>
+    <h2 style="color:var(--primary)">Exam Portal</h2>
+</div>
+
+<div class="container" id="main-ui">
     <div class="branding">
         <h1>MCQ Exam Portal</h1>
-        <div class="creator">Created by Topu</div>
+        <div class="creator-tag">Created by Topu</div>
     </div>
 
     <div id="setup">
         <div class="tabs">
-            <button class="tab-btn active" id="tab-smart" onclick="switchTab('smart')">Smart Text</button>
-            <button class="tab-btn" id="tab-json" onclick="switchTab('json')">Direct JSON</button>
+            <button class="tab-btn active" id="btn-smart" onclick="setTab('smart')">Smart Text</button>
+            <button class="tab-btn" id="btn-json" onclick="setTab('json')">Direct JSON</button>
         </div>
 
-        <div id="smart-section">
-            <label>Google Lens থেকে টেক্সট পেস্ট করুন:</label>
-            <textarea id="raw-text" placeholder="১. প্রশ্ন? ক) উত্তর খ) উত্তর..."></textarea>
-            <button class="btn" style="background:var(--success)" onclick="smartConvert()">অটো-জেনারেট JSON</button>
+        <div id="input-area">
+            <textarea id="data-input" placeholder="১. প্রশ্ন? ক) উত্তর খ) উত্তর..."></textarea>
+            <button id="auto-gen-btn" class="btn-main btn-success" onclick="processData()">অটো-জেনারেট JSON</button>
         </div>
 
-        <div id="json-section" class="hidden">
-            <label>JSON কোড এডিট করুন:</label>
-            <textarea id="json-input" placeholder="এখানে JSON কোড থাকবে..."></textarea>
-        </div>
-
-        <div class="input-group">
+        <div class="input-card">
             <label>পরীক্ষার মোড:</label>
-            <select id="exam-mode" onchange="toggleModeInput()">
+            <select id="exam-mode" onchange="toggleModeSettings()">
                 <option value="poll">প্রতি প্রশ্ন ভিত্তিক সময় (Poll Mode)</option>
-                <option value="full">সম্পূর্ণ পরীক্ষার মোট সময় (Exam Mode)</option>
+                <option value="full">সম্পূর্ণ পরীক্ষা (Exam Mode)</option>
             </select>
 
-            <div id="poll-time-div">
-                <label>সময় (প্রতি প্রশ্ন): <input type="number" id="user-time" value="30"> সেকেন্ড</label>
+            <div id="poll-settings">
+                <label>সময় (প্রতি প্রশ্ন - সেকেন্ড):</label>
+                <input type="number" id="poll-time" value="30">
             </div>
-            <div id="full-time-div" class="hidden">
-                <label>মোট সময় (সম্পূর্ণ পরীক্ষা): <input type="number" id="total-exam-time" value="30"> মিনিট</label>
+            <div id="full-settings" class="hidden">
+                <label>মোট সময় (মিনিট):</label>
+                <input type="number" id="full-time" value="30">
             </div>
 
-            <div class="checkbox-row">
-                <input type="checkbox" id="neg-on" onchange="document.getElementById('neg-val-div').classList.toggle('hidden')"> 
-                <label style="margin:0">নেগেটিভ মার্কিং চালু করুন</label>
-            </div>
-            <div id="neg-val-div" class="hidden" style="margin-top:10px;">
-                <label>কাটা যাবে (প্রতি ভুল): <input type="number" id="neg-val" step="0.05" value="0.25"></label>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+                <input type="checkbox" id="neg-mark"> <label style="margin:0">নেগেটিভ মার্কিং (০.২৫)</label>
             </div>
         </div>
 
-        <button class="btn" onclick="startExam()">পরীক্ষা শুরু করুন</button>
+        <button class="btn-main btn-primary" onclick="startExam()">পরীক্ষা শুরু করুন</button>
+        <div class="quote-footer" id="motivate"></div>
     </div>
 
-    <div id="exam" class="hidden">
-        <div class="header-box">
-            <span id="progress-text">প্রশ্ন ১/০</span>
-            <button class="quit-btn" onclick="quitExam()">End Exam</button>
-            <span id="timer-text">-- : --</span>
+    <div id="exam-screen" class="hidden">
+        <div class="sticky-header">
+            <span id="ques-count"></span>
+            <div id="timer-display">00:00</div>
+            <button onclick="confirmFinish()" style="background:none; border:none; color:var(--danger); font-weight:bold; cursor:pointer;">End</button>
         </div>
-        <div class="timer-bg"><div id="timer-fill"></div></div>
-        <h3 id="question-display"></h3>
-        <div id="options-display"></div>
-        <div id="exp-box" class="hidden"><strong>ব্যাখ্যা:</strong> <span id="exp-text"></span></div>
-        <button id="next-btn" class="btn hidden" onclick="goNext()" style="background:#5f6368">পরবর্তী প্রশ্ন</button>
+        <div id="render-target"></div>
+        <button id="next-btn" class="btn-main btn-primary hidden" onclick="nextPollQues()">পরবর্তী প্রশ্ন</button>
+        <button id="submit-all" class="btn-main btn-success hidden" onclick="confirmFinish()">Final Submission</button>
     </div>
 
-    <div id="result" class="hidden">
-        <h2>রেজাল্ট সামারি</h2>
-        <div id="score-card" style="text-align:center; background:#f1f3f4; padding:20px; border-radius:15px; margin-bottom:20px;">
-            <p>সঠিক: <span id="res-corr" style="color:green">0</span> | ভুল: <span id="res-wrong" style="color:red">0</span></p>
-            <p id="res-neg-p" class="hidden">নেগেটিভ: -<span id="res-neg">0</span></p>
-            <h1 id="res-total" style="font-size: 40px; margin: 10px 0;">0</h1>
-            <p style="margin:0; color:#777">অর্জিত নম্বর</p>
+    <div id="result-screen" class="hidden">
+        <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:20px; margin-bottom:20px;">
+            <h1 id="total-score" style="font-size:45px; color:var(--primary); margin:0;">0</h1>
+            <p style="font-weight:bold; color:#5f6368;">মোট স্কোর</p>
         </div>
-        <div id="final-summary" style="overflow-x:auto"></div>
-        <button class="btn" onclick="location.reload()">নতুন পরীক্ষা শুরু করুন</button>
-    </div>
 
-    <div class="footer-credit">© 2026 | Topu - All Rights Reserved</div>
+        <div class="stats-grid">
+            <div class="stat-item" style="border-top: 4px solid var(--success);">
+                <span class="stat-val" id="stat-correct" style="color:var(--success);">0</span>
+                <span class="stat-label">Correct</span>
+            </div>
+            <div class="stat-item" style="border-top: 4px solid var(--danger);">
+                <span class="stat-val" id="stat-wrong" style="color:var(--danger);">0</span>
+                <span class="stat-label">Wrong</span>
+            </div>
+            <div class="stat-item" style="border-top: 4px solid var(--warning);">
+                <span class="stat-val" id="stat-skipped" style="color:var(--warning);">0</span>
+                <span class="stat-label">Skipped</span>
+            </div>
+            <div class="stat-item" style="border-top: 4px solid var(--primary);">
+                <span class="stat-val" id="stat-accuracy" style="color:var(--primary);">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+
+        <div id="result-list"></div>
+        <button class="btn-main btn-primary" onclick="location.reload()">নতুন পরীক্ষা শুরু করুন</button>
+    </div>
 </div>
 
 <script>
-let questions = [], index = 0, scoreCorr = 0, scoreWrong = 0, logs = [];
-let timerObj, maxTime = 30, timeLeft = 30, negVal = 0, examMode = 'poll';
+let questions = [], currentIdx = 0, timeLeft, timer, examMode, scores = {c:0, w:0, s:0}, logs = [];
+const quotes = [
+    "“পরিশ্রম কখনো বৃথা যায় না, ধৈর্য ধরো সফল হবেই।”",
+    "“স্বপ্ন পূরণের পথে সবচেয়ে বড় হাতিয়ার হলো তোমার একাগ্রতা।”",
+    "“আজকের ছোট ছোট প্রচেষ্টাই আগামীকালের বড় সাফল্য।”",
+    "“মেডিকেলে ভর্তির স্বপ্ন দেখতে হলে পরিশ্রম করার সাহস রাখতে হয়।”"
+];
 
-function toggleModeInput() {
-    examMode = document.getElementById('exam-mode').value;
-    document.getElementById('poll-time-div').classList.toggle('hidden', examMode === 'full');
-    document.getElementById('full-time-div').classList.toggle('hidden', examMode === 'poll');
-}
+window.onload = () => {
+    document.getElementById('motivate').innerText = quotes[Math.floor(Math.random()*quotes.length)];
+    setTimeout(() => document.getElementById('welcome-screen').style.display='none', 1500);
+};
 
-function switchTab(t) {
-    document.getElementById('smart-section').classList.toggle('hidden', t === 'json');
-    document.getElementById('json-section').classList.toggle('hidden', t === 'smart');
-    document.getElementById('tab-smart').classList.toggle('active', t === 'smart');
-    document.getElementById('tab-json').classList.toggle('active', t === 'json');
-}
-
-function smartConvert() {
-    const raw = document.getElementById('raw-text').value;
-    if(!raw) return alert("টেক্সট দিন!");
-    const lines = raw.split('\n').filter(l => l.trim().length > 5);
-    let autoJSON = [];
-    for(let i=0; i<lines.length; i++) {
-        if(lines[i].length > 15) {
-            let opts = ["ক", "খ", "গ", "ঘ"];
-            if(lines[i+1] && lines[i+1].includes('খ)')) {
-                opts = lines[i+1].split(/[কখগঘa-d][\)\.]/).map(s => s.trim()).filter(s => s.length > 0);
-                i++;
-            }
-            autoJSON.push({ q: lines[i], options: opts.slice(0,4), correct: 0, explanation: "ব্যাখ্যা এখানে দিন।" });
-        }
+function setTab(mode) {
+    document.getElementById('btn-smart').classList.toggle('active', mode==='smart');
+    document.getElementById('btn-json').classList.toggle('active', mode==='json');
+    const genBtn = document.getElementById('auto-gen-btn');
+    if(mode==='smart') {
+        document.getElementById('data-input').placeholder = "১. প্রশ্ন? ক) উত্তর খ) উত্তর...";
+        genBtn.classList.remove('hidden');
+    } else {
+        document.getElementById('data-input').placeholder = "এখানে কোড পেস্ট করুন (JSON format)...";
+        genBtn.classList.add('hidden');
     }
-    document.getElementById('json-input').value = JSON.stringify(autoJSON, null, 2);
-    alert("JSON তৈরি হয়েছে!");
-    switchTab('json');
+}
+
+function toggleModeSettings() {
+    let isPoll = document.getElementById('exam-mode').value === 'poll';
+    document.getElementById('poll-settings').classList.toggle('hidden', !isPoll);
+    document.getElementById('full-settings').classList.toggle('hidden', isPoll);
+}
+
+function processData() {
+    const txt = document.getElementById('data-input').value;
+    if(!txt) return alert("তথ্য দিন!");
+    let generated = [{ q: txt.split('\n')[0], options: ["ক", "খ", "গ", "ঘ"], correct: 0, explanation: "ব্যাখ্যা এখানে লিখুন।" }];
+    document.getElementById('data-input').value = JSON.stringify(generated, null, 2);
+    setTab('json');
+    alert("অটো-জেনারেট হয়েছে!");
 }
 
 function startExam() {
     try {
-        questions = JSON.parse(document.getElementById('json-input').value);
-        if(document.getElementById('neg-on').checked) negVal = parseFloat(document.getElementById('neg-val').value);
-        
+        questions = JSON.parse(document.getElementById('data-input').value);
         examMode = document.getElementById('exam-mode').value;
-        if(examMode === 'poll') {
-            maxTime = parseInt(document.getElementById('user-time').value) || 30;
-            timeLeft = maxTime;
-        } else {
-            let mins = parseInt(document.getElementById('total-exam-time').value) || 30;
-            maxTime = mins * 60;
-            timeLeft = maxTime;
-        }
-
         document.getElementById('setup').classList.add('hidden');
-        document.getElementById('exam').classList.remove('hidden');
-        
-        if(examMode === 'full') runGlobalTimer(); // স্টার্ট গ্লোবাল টাইমার
-        loadQuestion();
-    } catch(e) { alert("JSON ঠিকমতো দিন!"); }
-}
-
-function loadQuestion() {
-    const q = questions[index];
-    document.getElementById('progress-text').innerText = `প্রশ্ন ${index+1}/${questions.length}`;
-    document.getElementById('question-display').innerText = q.q;
-    document.getElementById('exp-box').classList.add('hidden');
-    document.getElementById('next-btn').classList.add('hidden');
-    
-    const container = document.getElementById('options-display');
-    container.innerHTML = '';
-    q.options.forEach((opt, i) => {
-        const b = document.createElement('button');
-        b.className = 'option-btn';
-        b.innerText = opt;
-        b.onclick = () => checkAns(i, b);
-        container.appendChild(b);
-    });
-
-    if(examMode === 'poll') {
-        timeLeft = maxTime;
-        runPollTimer();
-    }
-}
-
-function runPollTimer() {
-    clearInterval(timerObj);
-    updateUI();
-    timerObj = setInterval(() => {
-        timeLeft--;
-        updateUI();
-        if(timeLeft <= 0) { clearInterval(timerObj); finishStep(null, false); }
-    }, 1000);
-}
-
-function runGlobalTimer() {
-    clearInterval(timerObj);
-    updateUI();
-    timerObj = setInterval(() => {
-        timeLeft--;
-        updateUI();
-        if(timeLeft <= 0) { 
-            clearInterval(timerObj); 
-            alert("সময় শেষ!"); 
-            showResult(); 
+        document.getElementById('exam-screen').classList.remove('hidden');
+        if(examMode === 'poll') {
+            timeLeft = parseInt(document.getElementById('poll-time').value);
+            renderPoll();
+        } else {
+            timeLeft = parseInt(document.getElementById('full-time').value) * 60;
+            renderFull();
+            document.getElementById('submit-all').classList.remove('hidden');
         }
+        startClock();
+    } catch(e) { alert("JSON ফরমেটে ভুল আছে!"); }
+}
+
+function renderPoll() {
+    const q = questions[currentIdx];
+    document.getElementById('ques-count').innerText = `প্রশ্ন: ${currentIdx+1}/${questions.length}`;
+    let html = `<div class="poll-box"><h3>${q.q}</h3>`;
+    q.options.forEach((opt, i) => {
+        html += `<button class="poll-option" onclick="checkPoll(${i}, this)">${opt}</button>`;
+    });
+    document.getElementById('render-target').innerHTML = html + `</div><div id="poll-exp" class="hidden res-exp"></div>`;
+}
+
+function checkPoll(i, btn) {
+    const q = questions[currentIdx];
+    const btns = document.querySelectorAll('.poll-option');
+    btns.forEach(b => b.disabled = true);
+    if(i === q.correct) { btn.classList.add('correct'); scores.c++; }
+    else { btn.classList.add('wrong'); btns[q.correct].classList.add('correct'); scores.w++; }
+    document.getElementById('poll-exp').innerHTML = `<b>ব্যাখ্যা:</b> ${q.explanation || q.exp || "নেই"}`;
+    document.getElementById('poll-exp').classList.remove('hidden');
+    document.getElementById('next-btn').classList.remove('hidden');
+    logs.push({q: q.q, u: i, c: q.correct, exp: q.explanation || q.exp});
+}
+
+function nextPollQues() {
+    if(logs.length <= currentIdx) { scores.s++; logs.push({q: questions[currentIdx].q, u: null, c: questions[currentIdx].correct, exp: questions[currentIdx].explanation || questions[currentIdx].exp}); }
+    currentIdx++;
+    if(currentIdx < questions.length) {
+        document.getElementById('next-btn').classList.add('hidden');
+        renderPoll();
+        timeLeft = parseInt(document.getElementById('poll-time').value);
+    } else finishExam();
+}
+
+function renderFull() {
+    let html = '';
+    questions.forEach((q, i) => {
+        html += `<div class="ques-card">
+            <p><b>${i+1}. ${q.q}</b></p>
+            ${q.options.map((o, oi) => `<label class="option-item"><input type="radio" name="q${i}" value="${oi}" onclick="lockFull(${i})"> ${o}</label>`).join('')}
+        </div>`;
+    });
+    document.getElementById('render-target').innerHTML = html;
+}
+
+function lockFull(qIdx) {
+    const radios = document.getElementsByName(`q${qIdx}`);
+    radios.forEach(r => { if(!r.checked) r.disabled = true; });
+}
+
+function startClock() {
+    timer = setInterval(() => {
+        let m = Math.floor(timeLeft / 60);
+        let s = timeLeft % 60;
+        document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+        if(timeLeft <= 0) { if(examMode === 'poll') nextPollQues(); else finishExam(); }
+        timeLeft--;
     }, 1000);
 }
 
-function updateUI() {
-    let m = Math.floor(timeLeft / 60);
-    let s = timeLeft % 60;
-    document.getElementById('timer-text').innerText = `${m < 10 ? '0'+m : m} : ${s < 10 ? '0'+s : s}`;
-    document.getElementById('timer-fill').style.width = (timeLeft/maxTime)*100 + "%";
-}
+function confirmFinish() { if(confirm("আপনি কি নিশ্চিত?")) finishExam(); }
 
-function checkAns(s, b) {
-    if(examMode === 'poll') clearInterval(timerObj);
-    
-    const c = questions[index].correct;
-    const all = document.querySelectorAll('.option-btn');
-    all.forEach(btn => btn.disabled = true);
-    
-    let isC = (s === c);
-    if(isC) { b.classList.add('correct'); scoreCorr++; }
-    else { b.classList.add('wrong'); all[c].classList.add('correct'); scoreWrong++; }
-    
-    finishStep(s === null ? "সময় শেষ" : questions[index].options[s], isC);
-}
-
-function finishStep(uA, isC) {
-    const q = questions[index];
-    document.getElementById('exp-text').innerText = q.explanation || "ব্যাখ্যা নেই।";
-    document.getElementById('exp-box').classList.remove('hidden');
-    document.getElementById('next-btn').classList.remove('hidden');
-    
-    logs.push({ q: q.q, cA: q.options[q.correct], uA: uA, isC: isC, exp: q.explanation });
-}
-
-function goNext() {
-    index++;
-    if(index < questions.length) {
-        loadQuestion();
-    } else {
-        clearInterval(timerObj);
-        showResult();
+function finishExam() {
+    clearInterval(timer);
+    if(examMode === 'full') {
+        questions.forEach((q, i) => {
+            let sel = document.querySelector(`input[name="q${i}"]:checked`);
+            let val = sel ? parseInt(sel.value) : null;
+            if(val === null) scores.s++;
+            else if(val === q.correct) scores.c++; else scores.w++;
+            logs.push({q: q.q, u: val, c: q.correct, exp: q.explanation || q.exp});
+        });
     }
-}
-
-function quitExam() {
-    if(confirm("তপু, তুমি কি এখনই পরীক্ষা শেষ করতে চাও? এ পর্যন্ত দেওয়া উত্তরগুলোর রেজাল্ট দেখানো হবে।")) {
-        clearInterval(timerObj);
-        showResult();
-    }
+    showResult();
 }
 
 function showResult() {
-    document.getElementById('exam').classList.add('hidden');
-    document.getElementById('result').classList.remove('hidden');
-    let nT = scoreWrong * negVal;
-    document.getElementById('res-corr').innerText = scoreCorr;
-    document.getElementById('res-wrong').innerText = scoreWrong;
-    if(negVal > 0) {
-        document.getElementById('res-neg-p').classList.remove('hidden');
-        document.getElementById('res-neg').innerText = nT.toFixed(2);
-    }
-    document.getElementById('res-total').innerText = (scoreCorr - nT).toFixed(2);
-    
-    let h = '<table><tr><th>প্রশ্ন</th><th>আপনার উত্তর</th><th>সঠিক উত্তর</th><th>ব্যাখ্যা</th></tr>';
-    logs.forEach(l => {
-        h += `<tr><td>${l.q}</td><td style="color:${l.isC?'green':'red'}">${l.uA || '---'}</td><td>${l.cA}</td><td>${l.exp}</td></tr>`;
+    document.getElementById('exam-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    let neg = document.getElementById('neg-mark').checked ? scores.w * 0.25 : 0;
+    let totalScore = scores.c - neg;
+    let accuracy = scores.c + scores.w > 0 ? Math.round((scores.c / (scores.c + scores.w)) * 100) : 0;
+
+    document.getElementById('total-score').innerText = totalScore.toFixed(2);
+    document.getElementById('stat-correct').innerText = scores.c;
+    document.getElementById('stat-wrong').innerText = scores.w;
+    document.getElementById('stat-skipped').innerText = scores.s;
+    document.getElementById('stat-accuracy').innerText = accuracy + "%";
+
+    let resultList = document.getElementById('result-list');
+    resultList.innerHTML = '';
+    logs.forEach((l, i) => {
+        let card = document.createElement('div');
+        card.className = 'result-card';
+        let uAns = l.u !== null ? questions[i].options[l.u] : "Skipped";
+        card.innerHTML = `
+            <div class="res-q">${i+1}. ${l.q}</div>
+            <div class="res-opt ${l.u === l.c ? 'res-correct' : (l.u !== null ? 'res-wrong' : '')}"><b>আপনার উত্তর:</b> ${uAns}</div>
+            ${l.u !== l.c ? `<div class="res-opt res-correct"><b>সঠিক উত্তর:</b> ${questions[i].options[l.c]}</div>` : ''}
+            <div class="res-exp"><b>ব্যাখ্যা:</b> ${l.exp || "নেই।"}</div>
+        `;
+        resultList.appendChild(card);
     });
-    document.getElementById('final-summary').innerHTML = h + '</table>';
 }
 </script>
 </body>
