@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Exam Portal</title>
+    <title>Topu's Advanced Exam Portal</title>
     <style>
         :root { --primary: #1a73e8; --success: #34a853; --danger: #d93025; --warning: #f9ab00; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         
+        /* Welcome Animation */
         #welcome-screen { position: fixed; width: 100%; height: 100vh; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: 0.8s; }
         .loader { border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -17,27 +18,32 @@
         .branding h1 { color: var(--primary); font-size: 28px; margin: 0; }
         .creator-tag { font-size: 14px; color: #5f6368; font-weight: bold; margin-top: 5px; }
 
+        /* Tabs */
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { flex: 1; padding: 12px; border: none; background: #f1f3f4; border-radius: 10px; cursor: pointer; font-weight: bold; color: #5f6368; }
         .tab-btn.active { background: var(--primary); color: white; }
 
-        .input-card { background: #f8f9fa; padding: 20px; border-radius: 15px; margin-top: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 10px; color: #3c4043; }
+        .input-card { background: #f8f9fa; padding: 20px; border-radius: 15px; margin-top: 15px; border: 1px solid #eee; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #3c4043; font-size: 14px; }
         textarea { width: 100%; height: 120px; padding: 15px; border-radius: 12px; border: 1px solid #dadce0; font-size: 14px; box-sizing: border-box; resize: vertical; }
         
-        select, input[type="number"] { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #dadce0; font-size: 15px; background: white; margin-bottom: 15px; box-sizing: border-box; }
+        select, input[type="number"], input[type="text"] { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #dadce0; font-size: 15px; background: white; margin-bottom: 15px; box-sizing: border-box; }
 
         .btn-main { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--success); color: white; }
 
+        /* Range Group */
+        .range-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .range-group div { flex: 1; }
+
+        /* Exam UI */
         .sticky-header { position: sticky; top: 0; background: white; padding: 15px; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         #timer-display { background: var(--danger); color: white; padding: 5px 12px; border-radius: 6px; font-weight: bold; }
         
         .ques-card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin: 15px 0; }
         .option-item { display: flex; align-items: center; padding: 12px; border: 1px solid #eee; border-radius: 50px; margin: 8px 0; cursor: pointer; transition: 0.2s; }
         .option-item:hover { background: #f0f7ff; }
-        .option-item input { margin-right: 12px; width: 18px; height: 18px; }
 
         .poll-option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e8eaed; border-radius: 12px; background: white; cursor: pointer; text-align: left; font-size: 16px; }
         .correct { background: #e6f4ea !important; border-color: var(--success) !important; color: #137333; font-weight: bold; }
@@ -47,13 +53,8 @@
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .stat-item { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
         .stat-val { font-size: 20px; font-weight: bold; display: block; }
-        .stat-label { font-size: 12px; color: #5f6368; }
 
         .result-card { background: white; border: 1px solid #e0e0e0; border-radius: 15px; padding: 20px; margin-bottom: 15px; }
-        .res-q { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #202124; }
-        .res-opt { padding: 10px 15px; border-radius: 10px; margin: 5px 0; font-size: 14px; }
-        .res-correct { background: #e6f4ea; color: #137333; border: 1px solid var(--success); }
-        .res-wrong { background: #fce8e6; color: #a50e0e; border: 1px solid var(--danger); }
         .res-exp { background: #e8f0fe; padding: 12px; border-radius: 10px; margin-top: 10px; font-size: 13px; color: #1967d2; border-left: 4px solid var(--primary); }
 
         .hidden { display: none; }
@@ -84,7 +85,24 @@
             <button id="auto-gen-btn" class="btn-main btn-success" onclick="processData()">অটো-জেনারেট JSON</button>
         </div>
 
+        <div class="input-card" style="background: #eef2f7;">
+            <label>প্রশ্ন সেট সেভ/লোড করুন:</label>
+            <div style="display:flex; gap:5px; margin-bottom:10px;">
+                <input type="text" id="save-name" placeholder="সেটের নাম দিন" style="margin-bottom:0;">
+                <button onclick="saveQuestions()" style="padding:0 15px; border-radius:10px; background:var(--success); color:white; border:none; cursor:pointer;">Save</button>
+            </div>
+            <select id="saved-lists" onchange="loadSavedQuestions()">
+                <option value="">সেভ করা সেটগুলো দেখুন...</option>
+            </select>
+        </div>
+
         <div class="input-card">
+            <label>প্রশ্ন পরিসীমা (Range):</label>
+            <div class="range-group">
+                <div><input type="number" id="start-q" value="1" min="1"></div>
+                <div><input type="number" id="end-q" placeholder="পর্যন্ত"></div>
+            </div>
+
             <label>পরীক্ষার মোড:</label>
             <select id="exam-mode" onchange="toggleModeSettings()">
                 <option value="poll">প্রতি প্রশ্ন ভিত্তিক সময় (Poll Mode)</option>
@@ -97,7 +115,7 @@
             </div>
             <div id="full-settings" class="hidden">
                 <label>মোট সময় (মিনিট):</label>
-                <input type="number" id="full-time" value="30">
+                <input type="number" id="total-full-time" value="30">
             </div>
 
             <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
@@ -123,44 +141,21 @@
     <div id="result-screen" class="hidden">
         <div style="text-align:center; padding:20px; background:#f8f9fa; border-radius:20px; margin-bottom:20px;">
             <h1 id="total-score" style="font-size:45px; color:var(--primary); margin:0;">0</h1>
-            <p style="font-weight:bold; color:#5f6368;">মোট স্কোর</p>
+            <p style="font-weight:bold;">মোট স্কোর</p>
         </div>
-
-        <div class="stats-grid">
-            <div class="stat-item" style="border-top: 4px solid var(--success);">
-                <span class="stat-val" id="stat-correct" style="color:var(--success);">0</span>
-                <span class="stat-label">Correct</span>
-            </div>
-            <div class="stat-item" style="border-top: 4px solid var(--danger);">
-                <span class="stat-val" id="stat-wrong" style="color:var(--danger);">0</span>
-                <span class="stat-label">Wrong</span>
-            </div>
-            <div class="stat-item" style="border-top: 4px solid var(--warning);">
-                <span class="stat-val" id="stat-skipped" style="color:var(--warning);">0</span>
-                <span class="stat-label">Skipped</span>
-            </div>
-            <div class="stat-item" style="border-top: 4px solid var(--primary);">
-                <span class="stat-val" id="stat-accuracy" style="color:var(--primary);">0%</span>
-                <span class="stat-label">Accuracy</span>
-            </div>
-        </div>
-
+        <div class="stats-grid" id="stats-view"></div>
         <div id="result-list"></div>
         <button class="btn-main btn-primary" onclick="location.reload()">নতুন পরীক্ষা শুরু করুন</button>
     </div>
 </div>
 
 <script>
-let questions = [], currentIdx = 0, timeLeft, timer, examMode, scores = {c:0, w:0, s:0}, logs = [];
-const quotes = [
-    "“পরিশ্রম কখনো বৃথা যায় না, ধৈর্য ধরো সফল হবেই।”",
-    "“স্বপ্ন পূরণের পথে সবচেয়ে বড় হাতিয়ার হলো তোমার একাগ্রতা।”",
-    "“আজকের ছোট ছোট প্রচেষ্টাই আগামীকালের বড় সাফল্য।”",
-    "“মেডিকেলে ভর্তির স্বপ্ন দেখতে হলে পরিশ্রম করার সাহস রাখতে হয়।”"
-];
+let allQuestions = [], activeQuestions = [], currentIdx = 0, timeLeft, timer, examMode, scores = {c:0, w:0, s:0}, logs = [];
+const quotes = ["“পরিশ্রম কখনো বৃথা যায় না।”", "“স্বপ্ন পূরণের পথে একাগ্রতাই মূল চাবিকাঠি।”"];
 
 window.onload = () => {
     document.getElementById('motivate').innerText = quotes[Math.floor(Math.random()*quotes.length)];
+    updateSavedList();
     setTimeout(() => document.getElementById('welcome-screen').style.display='none', 1500);
 };
 
@@ -168,13 +163,35 @@ function setTab(mode) {
     document.getElementById('btn-smart').classList.toggle('active', mode==='smart');
     document.getElementById('btn-json').classList.toggle('active', mode==='json');
     const genBtn = document.getElementById('auto-gen-btn');
-    if(mode==='smart') {
-        document.getElementById('data-input').placeholder = "১. প্রশ্ন? ক) উত্তর খ) উত্তর...";
-        genBtn.classList.remove('hidden');
-    } else {
-        document.getElementById('data-input').placeholder = "এখানে কোড পেস্ট করুন (JSON format)...";
-        genBtn.classList.add('hidden');
+    document.getElementById('data-input').placeholder = mode==='smart' ? "১. প্রশ্ন? ক) উত্তর খ) উত্তর..." : "এখানে JSON কোড পেস্ট করুন...";
+    genBtn.classList.toggle('hidden', mode==='json');
+}
+
+function saveQuestions() {
+    const data = document.getElementById('data-input').value;
+    const name = document.getElementById('save-name').value;
+    if(!data || !name) return alert("তথ্য ও নাম দিন!");
+    localStorage.setItem('topu_quiz_' + name, data);
+    alert("সেভ হয়েছে!");
+    updateSavedList();
+}
+
+function updateSavedList() {
+    const dropdown = document.getElementById('saved-lists');
+    dropdown.innerHTML = '<option value="">সেভ করা সেটগুলো দেখুন...</option>';
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('topu_quiz_')) {
+            const name = key.replace('topu_quiz_', '');
+            const opt = document.createElement('option');
+            opt.value = key; opt.text = name; dropdown.add(opt);
+        }
     }
+}
+
+function loadSavedQuestions() {
+    const key = document.getElementById('saved-lists').value;
+    if(key) document.getElementById('data-input').value = localStorage.getItem(key);
 }
 
 function toggleModeSettings() {
@@ -189,39 +206,33 @@ function processData() {
     let generated = [{ q: txt.split('\n')[0], options: ["ক", "খ", "গ", "ঘ"], correct: 0, explanation: "ব্যাখ্যা এখানে লিখুন।" }];
     document.getElementById('data-input').value = JSON.stringify(generated, null, 2);
     setTab('json');
-    alert("অটো-জেনারেট হয়েছে!");
 }
 
 function startExam() {
     try {
-        questions = JSON.parse(document.getElementById('data-input').value);
+        allQuestions = JSON.parse(document.getElementById('data-input').value);
+        let start = parseInt(document.getElementById('start-q').value) - 1;
+        let end = parseInt(document.getElementById('end-q').value) || allQuestions.length;
+        activeQuestions = allQuestions.slice(start, end);
         examMode = document.getElementById('exam-mode').value;
         document.getElementById('setup').classList.add('hidden');
         document.getElementById('exam-screen').classList.remove('hidden');
-        if(examMode === 'poll') {
-            timeLeft = parseInt(document.getElementById('poll-time').value);
-            renderPoll();
-        } else {
-            timeLeft = parseInt(document.getElementById('full-time').value) * 60;
-            renderFull();
-            document.getElementById('submit-all').classList.remove('hidden');
-        }
+        if(examMode === 'poll') { timeLeft = parseInt(document.getElementById('poll-time').value); renderPoll(); }
+        else { timeLeft = (parseInt(document.getElementById('total-full-time').value) || 30) * 60; renderFull(); document.getElementById('submit-all').classList.remove('hidden'); }
         startClock();
-    } catch(e) { alert("JSON ফরমেটে ভুল আছে!"); }
+    } catch(e) { alert("JSON ফরমেটে ভুল!"); }
 }
 
 function renderPoll() {
-    const q = questions[currentIdx];
-    document.getElementById('ques-count').innerText = `প্রশ্ন: ${currentIdx+1}/${questions.length}`;
+    const q = activeQuestions[currentIdx];
+    document.getElementById('ques-count').innerText = `প্রশ্ন: ${currentIdx+1}/${activeQuestions.length}`;
     let html = `<div class="poll-box"><h3>${q.q}</h3>`;
-    q.options.forEach((opt, i) => {
-        html += `<button class="poll-option" onclick="checkPoll(${i}, this)">${opt}</button>`;
-    });
+    q.options.forEach((opt, i) => html += `<button class="poll-option" onclick="checkPoll(${i}, this)">${opt}</button>`);
     document.getElementById('render-target').innerHTML = html + `</div><div id="poll-exp" class="hidden res-exp"></div>`;
 }
 
 function checkPoll(i, btn) {
-    const q = questions[currentIdx];
+    const q = activeQuestions[currentIdx];
     const btns = document.querySelectorAll('.poll-option');
     btns.forEach(b => b.disabled = true);
     if(i === q.correct) { btn.classList.add('correct'); scores.c++; }
@@ -233,22 +244,16 @@ function checkPoll(i, btn) {
 }
 
 function nextPollQues() {
-    if(logs.length <= currentIdx) { scores.s++; logs.push({q: questions[currentIdx].q, u: null, c: questions[currentIdx].correct, exp: questions[currentIdx].explanation || questions[currentIdx].exp}); }
+    if(logs.length <= currentIdx) { scores.s++; logs.push({q: activeQuestions[currentIdx].q, u: null, c: activeQuestions[currentIdx].correct, exp: activeQuestions[currentIdx].explanation || activeQuestions[currentIdx].exp}); }
     currentIdx++;
-    if(currentIdx < questions.length) {
-        document.getElementById('next-btn').classList.add('hidden');
-        renderPoll();
-        timeLeft = parseInt(document.getElementById('poll-time').value);
-    } else finishExam();
+    if(currentIdx < activeQuestions.length) { document.getElementById('next-btn').classList.add('hidden'); renderPoll(); timeLeft = parseInt(document.getElementById('poll-time').value); }
+    else finishExam();
 }
 
 function renderFull() {
     let html = '';
-    questions.forEach((q, i) => {
-        html += `<div class="ques-card">
-            <p><b>${i+1}. ${q.q}</b></p>
-            ${q.options.map((o, oi) => `<label class="option-item"><input type="radio" name="q${i}" value="${oi}" onclick="lockFull(${i})"> ${o}</label>`).join('')}
-        </div>`;
+    activeQuestions.forEach((q, i) => {
+        html += `<div class="ques-card"><p><b>${i+1}. ${q.q}</b></p>${q.options.map((o, oi) => `<label class="option-item"><input type="radio" name="q${i}" value="${oi}" onclick="lockFull(${i})"> ${o}</label>`).join('')}</div>`;
     });
     document.getElementById('render-target').innerHTML = html;
 }
@@ -260,24 +265,22 @@ function lockFull(qIdx) {
 
 function startClock() {
     timer = setInterval(() => {
-        let m = Math.floor(timeLeft / 60);
-        let s = timeLeft % 60;
+        let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
         document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0'+s : s}`;
         if(timeLeft <= 0) { if(examMode === 'poll') nextPollQues(); else finishExam(); }
         timeLeft--;
     }, 1000);
 }
 
-function confirmFinish() { if(confirm("আপনি কি নিশ্চিত?")) finishExam(); }
+function confirmFinish() { if(confirm("নিশ্চিত?")) finishExam(); }
 
 function finishExam() {
     clearInterval(timer);
     if(examMode === 'full') {
-        questions.forEach((q, i) => {
+        activeQuestions.forEach((q, i) => {
             let sel = document.querySelector(`input[name="q${i}"]:checked`);
             let val = sel ? parseInt(sel.value) : null;
-            if(val === null) scores.s++;
-            else if(val === q.correct) scores.c++; else scores.w++;
+            if(val === null) scores.s++; else if(val === q.correct) scores.c++; else scores.w++;
             logs.push({q: q.q, u: val, c: q.correct, exp: q.explanation || q.exp});
         });
     }
@@ -288,29 +291,18 @@ function showResult() {
     document.getElementById('exam-screen').classList.add('hidden');
     document.getElementById('result-screen').classList.remove('hidden');
     let neg = document.getElementById('neg-mark').checked ? scores.w * 0.25 : 0;
-    let totalScore = scores.c - neg;
     let accuracy = scores.c + scores.w > 0 ? Math.round((scores.c / (scores.c + scores.w)) * 100) : 0;
-
-    document.getElementById('total-score').innerText = totalScore.toFixed(2);
-    document.getElementById('stat-correct').innerText = scores.c;
-    document.getElementById('stat-wrong').innerText = scores.w;
-    document.getElementById('stat-skipped').innerText = scores.s;
-    document.getElementById('stat-accuracy').innerText = accuracy + "%";
-
-    let resultList = document.getElementById('result-list');
-    resultList.innerHTML = '';
+    document.getElementById('total-score').innerText = (scores.c - neg).toFixed(2);
+    document.getElementById('stats-view').innerHTML = `
+        <div class="stat-item" style="color:var(--success)"><b>${scores.c}</b><br><small>Correct</small></div>
+        <div class="stat-item" style="color:var(--danger)"><b>${scores.w}</b><br><small>Wrong</small></div>
+        <div class="stat-item" style="color:var(--warning)"><b>${scores.s}</b><br><small>Skipped</small></div>
+        <div class="stat-item" style="color:var(--primary)"><b>${accuracy}%</b><br><small>Accuracy</small></div>`;
+    let resHtml = '';
     logs.forEach((l, i) => {
-        let card = document.createElement('div');
-        card.className = 'result-card';
-        let uAns = l.u !== null ? questions[i].options[l.u] : "Skipped";
-        card.innerHTML = `
-            <div class="res-q">${i+1}. ${l.q}</div>
-            <div class="res-opt ${l.u === l.c ? 'res-correct' : (l.u !== null ? 'res-wrong' : '')}"><b>আপনার উত্তর:</b> ${uAns}</div>
-            ${l.u !== l.c ? `<div class="res-opt res-correct"><b>সঠিক উত্তর:</b> ${questions[i].options[l.c]}</div>` : ''}
-            <div class="res-exp"><b>ব্যাখ্যা:</b> ${l.exp || "নেই।"}</div>
-        `;
-        resultList.appendChild(card);
+        resHtml += `<div class="result-card"><b>${i+1}. ${l.q}</b><div style="color:${l.u===l.c?'green':'red'}">উত্তর: ${l.u!==null?activeQuestions[i].options[l.u]:'Skipped'}</div>${l.u!==l.c?`<div>সঠিক: ${activeQuestions[i].options[l.c]}</div>`:''}<div class="res-exp">ব্যাখ্যা: ${l.exp||'নেই'}</div></div>`;
     });
+    document.getElementById('result-list').innerHTML = resHtml;
 }
 </script>
 </body>
