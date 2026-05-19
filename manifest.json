@@ -1,0 +1,17 @@
+{
+  "name": "ExamPulse Pro",
+  "short_name": "ExamPulse",
+  "description": "স্মার্ট মেডিকেল এক্সাম সিস্টেম",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
