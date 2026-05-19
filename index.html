@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4f46e5">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল</title>
@@ -125,7 +128,7 @@
                 </div>
                 <p id="motivational-quote-text" class="text-xs sm:text-sm font-semibold custom-text-title leading-relaxed">আজকের রাত জেগে করা পরিশ্রমই তোমার আগামীকালের সাদা অ্যাপ্রন আর স্টেথোস্কোপের শব্দ হয়ে ফিরে আসবে।</p>
             </div>
-            <button id="refresh-quote-btn" class="w-7 h-7 rounded-lg bg-slate-500/5 border custom-border custom-text-muted hover:text-indigo-500 flex items-center justify-center transition flex-shrink-0">
+            <button id="refresh-quote-btn" class="w-7 h-7 rounded-lg bg-slate-500/5 border custom-border custom-text-muted hover:text-indigo-500 flex items-center justify-center transition flex-shrink-0" title="উক্তি পরিবর্তন করুন">
                 <i class="fa-solid fa-rotate text-[11px]"></i>
             </button>
         </div>
@@ -191,7 +194,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1 custom-text-title">নেগেティブ মার্ক:</label>
+                    <label class="block text-xs font-semibold mb-1 custom-text-title">নেগেটিভ মার্ক:</label>
                     <select id="negative-marking-select" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs focus:outline-none">
                         <option value="0">বন্ধ (0.00)</option>
                         <option value="0.25" selected>মেডিকেল (০.২৫)</option>
@@ -879,7 +882,7 @@
                             </div>
                             ${q.explanation ? `
                                 <div class="mt-2 p-3 custom-input border rounded-xl text-[11px] leading-relaxed shadow-sm">
-                                    <strong class="text-indigo-500 dark:text-indigo-400 block mb-0.5"><i class="fa-solid fa-lightbulb"></i> ব্যাখ্যা:</strong>
+                                    <strong class="text-indigo-500 dark:text-indigo-400 block mb-0.5"><i class="fa-solid fa-lightbulb"></i> মেডিকেল ব্যাখ্যা:</strong>
                                     <span class="custom-text-body">${q.explanation}</span>
                                 </div>
                             ` : ''}
@@ -1079,7 +1082,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4">${optsBlockHtml}</div>
                     ${q.explanation ? `
                         <div class="mt-3 p-3.5 rounded-xl bg-slate-500/5 border custom-border text-xs leading-relaxed shadow-sm">
-                            <strong class="text-indigo-600 dark:text-indigo-400 font-bold block mb-1"><i class="fa-solid fa-lightbulb"></i> ব্যাখ্যা:</strong>
+                            <strong class="text-indigo-600 dark:text-indigo-400 font-bold block mb-1"><i class="fa-solid fa-lightbulb"></i> মেডিকেল ব্যাখ্যা:</strong>
                             <p class="custom-text-body">${q.explanation}</p>
                         </div>
                     ` : ''}
@@ -1145,5 +1148,14 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker Registered!'))
+                .catch(err => console.log('SW Registration failed:', err));
+        });
+    }
+</script>
 </body>
 </html>
