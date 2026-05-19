@@ -100,11 +100,14 @@
                 </div>
                 <div>
                     <h1 class="text-lg font-bold tracking-wide bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">ExamPulse Pro</h1>
-                    <p class="text-[11px] custom-text-muted font-medium">স্মার্ট মেডিকেল এক্সাম সিস্টেম</p>
+                    <p class="text-[11px] custom-text-muted font-medium">স্মার্ট এক্সাম সিস্টেম</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3">
+                <button id="profile-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-indigo-500 custom-card hover:bg-slate-500/10 transition" title="ইউজার প্রোফাইল">
+                    <i class="fa-solid fa-user text-sm"></i>
+                </button>
                 <button id="theme-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-amber-500 custom-card hover:bg-slate-500/10 transition">
                     <i id="theme-icon" class="fa-solid fa-moon"></i>
                 </button>
@@ -308,6 +311,50 @@
 
     </main>
 
+    <!-- Profile Overlay Modal -->
+    <div id="profile-modal" class="hidden fixed inset-0 z-[100] overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="w-full max-w-md custom-card border rounded-2xl p-6 shadow-2xl relative space-y-4">
+            <button id="close-profile-btn" class="absolute top-4 right-4 w-7 h-7 rounded-lg bg-slate-500/5 border custom-border custom-text-muted hover:text-rose-500 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-20 h-20 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-full flex items-center justify-center mx-auto shadow-md">
+                    <i class="fa-solid fa-user-md text-3xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold custom-text-title">ইউজার প্রোফাইল</h3>
+                <p class="text-xs custom-text-muted">ExamPulse Pro ড্যাশবোর্ড</p>
+            </div>
+            <hr class="custom-border">
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold custom-text-muted mb-1">শিক্ষার্থীর নাম:</label>
+                    <input type="text" id="profile-name" class="w-full custom-input border rounded-xl p-2.5 font-medium focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block font-bold custom-text-muted mb-1">প্রতিষ্ঠান:</label>
+                    <input type="text" id="profile-institute" class="w-full custom-input border rounded-xl p-2.5 font-medium focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block font-bold custom-text-muted mb-1">ইমেইল ঠিকানা:</label>
+                    <input type="email" id="profile-email" class="w-full custom-input border rounded-xl p-2.5 font-medium focus:outline-none focus:border-indigo-500">
+                </div>
+            </div>
+            <div class="bg-slate-500/5 p-3 rounded-xl border custom-border grid grid-cols-2 gap-2 text-center text-xs font-bold">
+                <div class="p-2 custom-input border rounded-lg">
+                    <span class="block custom-text-muted mb-0.5 text-[10px]">মোট পরীক্ষা</span>
+                    <span id="profile-stat-exams" class="text-indigo-500 text-base">০</span>
+                </div>
+                <div class="p-2 custom-input border rounded-lg">
+                    <span class="block custom-text-muted mb-0.5 text-[10px]">সর্বশেষ স্কোর</span>
+                    <span id="profile-stat-score" class="text-emerald-500 text-base">০.০০</span>
+                </div>
+            </div>
+            <button id="save-profile-btn" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> তথ্য সংরক্ষণ করুন
+            </button>
+        </div>
+    </div>
+
     <footer class="border-t custom-border bg-slate-950/10 py-3 text-center text-xs custom-text-muted">
         <p>&copy; 2026 ExamPulse Pro Portal | MD Irfun Sadi Topu 🩺</p>
     </footer>
@@ -388,6 +435,12 @@
         const navGrid = document.getElementById('nav-grid');
         const reviewContainer = document.getElementById('review-container');
 
+        // Profile Selection Engine Handles
+        const profileToggleBtn = document.getElementById('profile-toggle-btn');
+        const profileModal = document.getElementById('profile-modal');
+        const closeProfileBtn = document.getElementById('close-profile-btn');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+
         window.addEventListener('DOMContentLoaded', bootstrapPortalEngine);
         themeToggleBtn.addEventListener('click', toggleThemeModeConfiguration);
         refreshQuoteBtn.addEventListener('click', loadRandomMotivationalQuote);
@@ -410,6 +463,12 @@
         saveFileBtn.addEventListener('click', exportPerformanceReportToTextFile);
         restartBtn.addEventListener('click', revertToHomeConsole);
 
+        // Profile Click Hooks
+        profileToggleBtn.addEventListener('click', () => profileModal.classList.remove('hidden'));
+        closeProfileBtn.addEventListener('click', () => profileModal.classList.add('hidden'));
+        saveProfileBtn.addEventListener('click', saveProfileDetailsEngine);
+        profileModal.addEventListener('click', (e) => { if(e.target === profileModal) profileModal.classList.add('hidden'); });
+
         function bootstrapPortalEngine() {
             const savedTheme = localStorage.getItem('exampulse_theme_mode');
             if (savedTheme === 'light') {
@@ -419,6 +478,38 @@
             loadRandomMotivationalQuote();
             syncLibraryDropdownMenu();
             inspectCachedProgressTokens();
+            initializeProfileSystemEngine();
+        }
+
+        function initializeProfileSystemEngine() {
+            const defaultMetadata = {
+                name: "MD Irfun Sadi Topu",
+                institute: "ঢাকা মেডিকেল কলেজ (DMC)",
+                email: "topu@exampulse.pro",
+                totalExams: 0,
+                lastScore: "০.০০"
+            };
+            let cache = JSON.parse(localStorage.getItem('exampulse_profile_data'));
+            if (!cache) {
+                cache = defaultMetadata;
+                localStorage.setItem('exampulse_profile_data', JSON.stringify(cache));
+            }
+            document.getElementById('profile-name').value = cache.name || '';
+            document.getElementById('profile-institute').value = cache.institute || '';
+            document.getElementById('profile-email').value = cache.email || '';
+            document.getElementById('profile-stat-exams').innerText = cache.totalExams || 0;
+            document.getElementById('profile-stat-score').innerText = cache.lastScore || '০.০০';
+        }
+
+        function saveProfileDetailsEngine() {
+            let cache = JSON.parse(localStorage.getItem('exampulse_profile_data')) || {};
+            cache.name = document.getElementById('profile-name').value.trim();
+            cache.institute = document.getElementById('profile-institute').value.trim();
+            cache.email = document.getElementById('profile-email').value.trim();
+            
+            localStorage.setItem('exampulse_profile_data', JSON.stringify(cache));
+            alert('প্রোফাইল তথ্য সফলভাবে সেভ করা হয়েছে!');
+            profileModal.classList.add('hidden');
         }
 
         function handleNativeJSONFileUpload(e) {
@@ -1022,6 +1113,15 @@
             const circ = 2 * Math.PI * 52;
             let conversionPct = finalScoreMetric > 0 ? (finalScoreMetric / total) * 100 : 0;
             document.getElementById('result-ring').style.strokeDashoffset = circ - (conversionPct / 100) * circ;
+
+            // Sync Stats to Profile Metadata Engine
+            let profileCache = JSON.parse(localStorage.getItem('exampulse_profile_data')) || {};
+            profileCache.totalExams = (parseInt(profileCache.totalExams) || 0) + 1;
+            profileCache.lastScore = `${finalScoreMetric.toFixed(2)} / ${total}`;
+            localStorage.setItem('exampulse_profile_data', JSON.stringify(profileCache));
+            
+            document.getElementById('profile-stat-exams').innerText = profileCache.totalExams;
+            document.getElementById('profile-stat-score').innerText = profileCache.lastScore;
 
             renderReviewFeedDashboard();
         }
