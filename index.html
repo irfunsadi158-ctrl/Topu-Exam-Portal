@@ -6,10 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         window.MathJax = {
             tex: { inlineMath: [
@@ -19,8 +17,7 @@
             startup: { typeset: false }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -214,22 +211,11 @@
             color: #fff;
         }
         @keyframes entrancePulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            15% {
-                transform: scale(1.18);
-            }
-            30% {
-                transform: scale(1);
-            }
-            45% {
-                transform: scale(1.12);
-            }
-            60% {
-                transform: scale(1);
-            }
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.18); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+            60% { transform: scale(1); }
         }
         .entrance-ripple {
             position: absolute;
@@ -237,23 +223,11 @@
             border: 2px solid rgba(99, 102, 241, 0.5);
             animation: rippleOut 1.8s ease-out infinite;
         }
-        .entrance-ripple:nth-child(2) {
-            animation-delay: 0.6s;
-        }
-        .entrance-ripple:nth-child(3) {
-            animation-delay: 1.2s;
-        }
+        .entrance-ripple:nth-child(2) { animation-delay: 0.6s; }
+        .entrance-ripple:nth-child(3) { animation-delay: 1.2s; }
         @keyframes rippleOut {
-            0% {
-                width: 70px;
-                height: 70px;
-                opacity: 0.9;
-            }
-            100% {
-                width: 160px;
-                height: 160px;
-                opacity: 0;
-            }
+            0% { width: 70px; height: 70px; opacity: 0.9; }
+            100% { width: 160px; height: 160px; opacity: 0; }
         }
         .entrance-title {
             margin-top: 24px;
@@ -267,13 +241,8 @@
             animation: shimmerText 2s ease-in-out infinite;
         }
         @keyframes shimmerText {
-            0%,
-            100% {
-                filter: brightness(1);
-            }
-            50% {
-                filter: brightness(1.4);
-            }
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.4); }
         }
         .entrance-subtitle {
             margin-top: 8px;
@@ -284,14 +253,8 @@
             animation: fadeInUp 1s ease-out;
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(14px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .entrance-dots {
             display: flex;
@@ -305,24 +268,12 @@
             background: #6366f1;
             animation: dotBounce 0.9s ease-in-out infinite;
         }
-        .entrance-dots span:nth-child(2) {
-            animation-delay: 0.15s;
-        }
-        .entrance-dots span:nth-child(3) {
-            animation-delay: 0.3s;
-        }
+        .entrance-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .entrance-dots span:nth-child(3) { animation-delay: 0.3s; }
         @keyframes dotBounce {
-            0%,
-            100% {
-                transform: translateY(0);
-                opacity: 0.5;
-            }
-            50% {
-                transform: translateY(-16px);
-                opacity: 1;
-            }
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-16px); opacity: 1; }
         }
-
         .tts-highlight {
             background: rgba(99, 102, 241, 0.25);
             border-radius: 8px;
@@ -883,7 +834,7 @@
             "আজকের রাত জেগে করা পরিশ্রমই তোমার আগামীকালের সাদা অ্যাপ্রন আর স্টেথোস্কোপের শব্দ হয়ে ফিরে আসবে। 🩺",
             "সাফল্যের কোনো শর্টকাট নেই; তোমার প্রতিদিনের ছোট ছোট ত্যাগ ও নিষ্ঠাই তোমাকে DMC-র বারান্দায় নিয়ে যাবে। 🚀",
             "মেডিকেল ভর্তি পরীক্ষা শুধু মেধার নয়, এটি তোমার শেষ মুহূর্ত পর্যন্ত টিকে থাকার ধৈর্য ও একাগ্রতার পরীক্ষা। 🧬",
-            "কঠিন পরিশ্রম কখনো বৃথা যায় না। নিজের ওপর বিশ্বাস রাখো, তুমিও পারবে স্টেথোস্কোপ জয় করতে। 💪",
+            "কঠিন পরিশ্রম কখনো বৃথা যায় সংরক্ষণ করো। নিজের ওপর বিশ্বাস রাখো, তুমিও পারবে স্টেথোস্কোপ জয় করতে। 💪",
             "যখনই পড়তে ভালো লাগবে না, চোখ বন্ধ করে একবার ভাবো—তোমার নামের আগে 'ডাঃ' লেখা দেখতে কতটা দারুণ লাগবে! ❤️",
             "কষ্ট যা করার এখনই করো, পরীক্ষার পর যখন মেরিট লিস্টে নিজের নাম দেখবে, সব কষ্ট এক নিমিষেই ভুলে যাবে! 🎯"
         ];
@@ -1177,12 +1128,45 @@
                 }
             }
         }
+        
         systemDark.addEventListener('change', () => {
             if (!localStorage.getItem('exampulse_theme_mode')) {
                 applySystemTheme();
                 if (activeQuestions && activeQuestions.length > 0) renderActiveQuestionState();
+                refreshChartsIfVisible(); // Update charts based on theme preference change
             }
         });
+
+        function toggleThemeModeConfiguration() {
+            if (document.body.classList.contains('light-theme')) {
+                document.body.classList.remove('light-theme');
+                themeIcon.className = "fa-solid fa-moon";
+                localStorage.setItem('exampulse_theme_mode', 'dark');
+            } else {
+                document.body.classList.add('light-theme');
+                themeIcon.className = "fa-solid fa-sun";
+                localStorage.setItem('exampulse_theme_mode', 'light');
+            }
+            if (activeQuestions && activeQuestions.length > 0) {
+                renderActiveQuestionState();
+            }
+            refreshChartsIfVisible(); // Live update for charts
+        }
+
+        function refreshChartsIfVisible() {
+            if (!resultSection.classList.contains('hidden')) {
+                let correct = 0, wrong = 0, skipped = 0;
+                if (activeQuestions && activeQuestions.length > 0) {
+                    activeQuestions.forEach((q, idx) => {
+                        const ans = userAnswers[idx];
+                        if (ans === null || ans === -1) skipped++;
+                        else if (ans === q.correct) correct++;
+                        else wrong++;
+                    });
+                }
+                renderAnalyticsCharts(correct, wrong, skipped);
+            }
+        }
 
         // ==================== BOOTSTRAP ====================
         window.addEventListener('DOMContentLoaded', bootstrapPortalEngine);
@@ -1368,21 +1352,6 @@
             quoteTextNode.innerText = getMotivationalQuote();
         }
 
-        function toggleThemeModeConfiguration() {
-            if (document.body.classList.contains('light-theme')) {
-                document.body.classList.remove('light-theme');
-                themeIcon.className = "fa-solid fa-moon";
-                localStorage.setItem('exampulse_theme_mode', 'dark');
-            } else {
-                document.body.classList.add('light-theme');
-                themeIcon.className = "fa-solid fa-sun";
-                localStorage.setItem('exampulse_theme_mode', 'light');
-            }
-            if (activeQuestions && activeQuestions.length > 0) {
-                renderActiveQuestionState();
-            }
-        }
-
         function handleExamModeFieldToggleUI() {
             if (examModeSelect.value === 'poll') {
                 durationLabel.textContent = t('time_label_poll');
@@ -1523,29 +1492,29 @@
             clearInterval(examTimer);
             refreshTimerUI();
             examTimer = setInterval(() => {
-    if (examMode === 'poll' && viewMode === 'list') {
-        stopwatchElapsed++;
-    } else {
-        if (!isTimerPaused) {
-            secondsRemaining--;
-            if (secondsRemaining < 0) secondsRemaining = 0; // negative prevent
-        }
-    }
-    refreshTimerUI();
-    if (secondsRemaining % 5 === 0) cacheStateToLocalStorage();
-    if (examMode === 'exam' && secondsRemaining <= 0) {
-        clearInterval(examTimer);
-        alert(t('time_up_alert'));
-        compileFinalPerformanceReport();
-    } else if (examMode === 'poll' && viewMode === 'single' && secondsRemaining <= 0) {
-        isTimerPaused = true;
-        if (userAnswers[currentIndex] === null) {
-            userAnswers[currentIndex] = -1;
-        }
-        cacheStateToLocalStorage();
-        renderActiveQuestionState();
-    }
-}, 1000);
+                if (examMode === 'poll' && viewMode === 'list') {
+                    stopwatchElapsed++;
+                } else {
+                    if (!isTimerPaused) {
+                        secondsRemaining--;
+                        if (secondsRemaining < 0) secondsRemaining = 0; // negative prevent
+                    }
+                }
+                refreshTimerUI();
+                if (secondsRemaining % 5 === 0) cacheStateToLocalStorage();
+                if (examMode === 'exam' && secondsRemaining <= 0) {
+                    clearInterval(examTimer);
+                    alert(t('time_up_alert'));
+                    compileFinalPerformanceReport();
+                } else if (examMode === 'poll' && viewMode === 'single' && secondsRemaining <= 0) {
+                    isTimerPaused = true;
+                    if (userAnswers[currentIndex] === null) {
+                        userAnswers[currentIndex] = -1;
+                    }
+                    cacheStateToLocalStorage();
+                    renderActiveQuestionState();
+                }
+            }, 1000);
         }
 
         function refreshTimerUI() {
@@ -2025,79 +1994,86 @@
         }
 
         function renderAnalyticsCharts(correct, wrong, skipped) {
-    const pieCtx = document.getElementById('pieChart')?.getContext('2d');
-    const barCtx = document.getElementById('barChart')?.getContext('2d');
-    if (pieChartInstance) pieChartInstance.destroy();
-    if (barChartInstance) barChartInstance.destroy();
+            const pieCtx = document.getElementById('pieChart')?.getContext('2d');
+            const barCtx = document.getElementById('barChart')?.getContext('2d');
+            if (pieChartInstance) pieChartInstance.destroy();
+            if (barChartInstance) barChartInstance.destroy();
 
-    // 🔥 থিম অনুযায়ী সরাসরি রং নির্ধারণ
-    const isLight = document.body.classList.contains('light-theme');
-    const labelColor = isLight ? '#0f172a' : '#ffffff';   // টাইটেলের রং
-    const tickColor = isLight ? '#334155' : '#cbd5e1';    // বডি/মিউটেড রং
+            // থিম অনুযায়ী কালার প্যালেট
+            const isLight = document.body.classList.contains('light-theme');
+            const labelColor = isLight ? '#0f172a' : '#ffffff';     // টাইটেল/লেবেল কালার
+            const tickColor = isLight ? '#475569' : '#cbd5e1';      // স্কেল কালার
+            const gridColor = isLight ? '#e2e8f0' : '#1e293b';      // গ্রিড লাইনের কালার
 
-    if (pieCtx) {
-        pieChartInstance = new Chart(pieCtx, {
-            type: 'doughnut',
-            data: {
-                labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
-                datasets: [{
-                    data: [correct, wrong, skipped],
-                    backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                    borderColor: isLight ? '#cbd5e1' : '#1e293b',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: labelColor,   // ✅ সরাসরি রং
-                            font: { size: 11 }
-                        }
-                    }
-                }
-            }
-        });
-    }
-    if (barCtx) {
-        barChartInstance = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
-                datasets: [{
-                    label: t('total_questions', { count: '' }),
-                    data: [correct, wrong, skipped],
-                    backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                            color: tickColor,       // ✅ সরাসরি রং
-                        },
-                        grid: { color: isLight ? '#cbd5e1' : '#1e293b' }
+            // Chart.js এর গ্লোবাল সেটিংস আপডেট
+            Chart.defaults.color = labelColor;
+            Chart.defaults.font.family = "'Hind Siliguri', 'Inter', sans-serif";
+
+            if (pieCtx) {
+                pieChartInstance = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
+                        datasets: [{
+                            data: [correct, wrong, skipped],
+                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                            borderColor: isLight ? '#ffffff' : '#0f172a', // চার্টের বর্ডার থিম অনুযায়ী
+                            borderWidth: 3
+                        }]
                     },
-                    x: {
-                        ticks: {
-                            color: labelColor,      // ✅ সরাসরি রং
-                            font: { size: 10 }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: labelColor,
+                                    font: { size: 12, weight: '600' }
+                                }
+                            }
                         }
                     }
-                }
+                });
             }
-        });
-    }
-}
+            if (barCtx) {
+                barChartInstance = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
+                        datasets: [{
+                            label: t('total_questions', { count: '' }).replace(': ', ''),
+                            data: [correct, wrong, skipped],
+                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    color: tickColor,
+                                    font: { weight: '500' }
+                                },
+                                grid: { color: gridColor }
+                            },
+                            x: {
+                                ticks: {
+                                    color: labelColor,
+                                    font: { size: 12, weight: '600' }
+                                },
+                                grid: { display: false } // X অক্ষে গ্রিড লাইন হাইড করা হয়েছে ক্লিন লুকের জন্য
+                            }
+                        }
+                    }
+                });
+            }
+        }
 
         function renderReviewFeedDashboard() {
             reviewContainer.innerHTML = '';
