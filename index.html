@@ -6,12 +6,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ] },
+            startup: { typeset: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --bg-main: #020617;
@@ -62,24 +76,100 @@
             background-color: var(--bg-main);
             color: var(--text-body);
         }
-        .font-en { font-family: 'Inter', 'Hind Siliguri', sans-serif; }
-        .custom-bg { background-color: var(--bg-main); }
-        .custom-card { background-color: var(--bg-card); border-color: var(--border-main); }
-        .custom-input { background-color: var(--bg-input); border-color: var(--border-main); color: var(--text-title); }
-        .custom-text-title { color: var(--text-title); }
-        .custom-text-body { color: var(--text-body); }
-        .custom-text-muted { color: var(--text-muted); }
-        .custom-border { border-color: var(--border-main); }
-        .state-selected { background-color: var(--bg-selected); border-color: var(--border-selected); color: var(--text-selected); }
-        .state-success { background-color: var(--bg-success); border-color: var(--border-success); color: var(--text-success); }
-        .state-error { background-color: var(--bg-error); border-color: var(--border-error); color: var(--text-error); }
-        .state-info { background-color: var(--bg-info); border-color: var(--border-info); color: var(--text-info); }
+        .font-en {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+        .custom-bg {
+            background-color: var(--bg-main);
+        }
+        .custom-card {
+            background-color: var(--bg-card);
+            border-color: var(--border-main);
+        }
+        .custom-input {
+            background-color: var(--bg-input);
+            border-color: var(--border-main);
+            color: var(--text-title);
+        }
+        .custom-text-title {
+            color: var(--text-title);
+        }
+        .custom-text-body {
+            color: var(--text-body);
+        }
+        .custom-text-muted {
+            color: var(--text-muted);
+        }
+        .custom-border {
+            border-color: var(--border-main);
+        }
+        .state-selected {
+            background-color: var(--bg-selected);
+            border-color: var(--border-selected);
+            color: var(--text-selected);
+        }
+        .state-success {
+            background-color: var(--bg-success);
+            border-color: var(--border-success);
+            color: var(--text-success);
+        }
+        .state-error {
+            background-color: var(--bg-error);
+            border-color: var(--border-error);
+            color: var(--text-error);
+        }
+        .state-info {
+            background-color: var(--bg-info);
+            border-color: var(--border-info);
+            color: var(--text-info);
+        }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
-        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 4px;
+        }
 
-        /* ============ ENTRANCE ANIMATION ============ */
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+                --bg-main: #fff;
+                --bg-card: #fff;
+                --text-title: #000;
+                --text-body: #222;
+                --border-main: #ccc;
+            }
+            header,
+            footer,
+            #setup-section,
+            #exam-section,
+            #profile-modal,
+            #quote-widget-banner,
+            #single-nav-controls,
+            #nav-grid,
+            .no-print {
+                display: none !important;
+            }
+            #result-section {
+                display: block !important;
+                max-width: 100% !important;
+            }
+            #review-container>div {
+                break-inside: avoid;
+                border: 1px solid #ccc !important;
+                background: #fff !important;
+            }
+            .custom-card {
+                box-shadow: none !important;
+            }
+        }
+
         #entrance-overlay {
             position: fixed;
             inset: 0;
@@ -91,7 +181,9 @@
             background: #020617;
             transition: opacity 0.7s ease, visibility 0.7s ease;
         }
-        body.light-theme #entrance-overlay { background: #f1f5f9; }
+        body.light-theme #entrance-overlay {
+            background: #f1f5f9;
+        }
         #entrance-overlay.fade-out {
             opacity: 0;
             visibility: hidden;
@@ -117,13 +209,27 @@
             animation: entrancePulse 0.8s ease-in-out infinite;
             box-shadow: 0 0 40px rgba(79, 70, 229, 0.5), 0 0 80px rgba(124, 58, 237, 0.3);
         }
-        .entrance-icon-inner i { font-size: 30px; color: #fff; }
+        .entrance-icon-inner i {
+            font-size: 30px;
+            color: #fff;
+        }
         @keyframes entrancePulse {
-            0%, 100% { transform: scale(1); }
-            15% { transform: scale(1.18); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.12); }
-            60% { transform: scale(1); }
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            15% {
+                transform: scale(1.18);
+            }
+            30% {
+                transform: scale(1);
+            }
+            45% {
+                transform: scale(1.12);
+            }
+            60% {
+                transform: scale(1);
+            }
         }
         .entrance-ripple {
             position: absolute;
@@ -131,11 +237,23 @@
             border: 2px solid rgba(99, 102, 241, 0.5);
             animation: rippleOut 1.8s ease-out infinite;
         }
-        .entrance-ripple:nth-child(2) { animation-delay: 0.6s; }
-        .entrance-ripple:nth-child(3) { animation-delay: 1.2s; }
+        .entrance-ripple:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        .entrance-ripple:nth-child(3) {
+            animation-delay: 1.2s;
+        }
         @keyframes rippleOut {
-            0% { width: 70px; height: 70px; opacity: 0.9; }
-            100% { width: 160px; height: 160px; opacity: 0; }
+            0% {
+                width: 70px;
+                height: 70px;
+                opacity: 0.9;
+            }
+            100% {
+                width: 160px;
+                height: 160px;
+                opacity: 0;
+            }
         }
         .entrance-title {
             margin-top: 24px;
@@ -149,8 +267,13 @@
             animation: shimmerText 2s ease-in-out infinite;
         }
         @keyframes shimmerText {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.4); }
+            0%,
+            100% {
+                filter: brightness(1);
+            }
+            50% {
+                filter: brightness(1.4);
+            }
         }
         .entrance-subtitle {
             margin-top: 8px;
@@ -161,10 +284,20 @@
             animation: fadeInUp 1s ease-out;
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(14px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .entrance-dots { display: flex; gap: 8px; margin-top: 20px; }
+        .entrance-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
         .entrance-dots span {
             width: 8px;
             height: 8px;
@@ -172,17 +305,34 @@
             background: #6366f1;
             animation: dotBounce 0.9s ease-in-out infinite;
         }
-        .entrance-dots span:nth-child(2) { animation-delay: 0.15s; }
-        .entrance-dots span:nth-child(3) { animation-delay: 0.3s; }
+        .entrance-dots span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        .entrance-dots span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
         @keyframes dotBounce {
-            0%, 100% { transform: translateY(0); opacity: 0.5; }
-            50% { transform: translateY(-16px); opacity: 1; }
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-16px);
+                opacity: 1;
+            }
+        }
+
+        .tts-highlight {
+            background: rgba(99, 102, 241, 0.25);
+            border-radius: 8px;
+            padding: 2px 4px;
+            transition: background 0.3s;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between select-none">
 
-    <!-- ==================== ENTRANCE ANIMATION OVERLAY ==================== -->
     <div id="entrance-overlay">
         <div class="entrance-icon-wrapper">
             <div class="entrance-ripple"></div>
@@ -199,7 +349,7 @@
         </div>
     </div>
 
-    <header class="border-b bg-slate-900/10 custom-border backdrop-blur-md sticky top-0 z-50">
+    <header class="border-b bg-slate-900/10 custom-border backdrop-blur-md sticky top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center flex-wrap gap-2">
             <div class="flex items-center gap-3">
                 <div class="bg-gradient-to-tr from-indigo-600 to-violet-600 p-2 rounded-xl shadow-md">
@@ -214,6 +364,9 @@
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <button id="lang-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-xs font-black custom-card hover:bg-slate-500/10 transition tracking-tighter" title="ভাষা পরিবর্তন / Switch Language">
                     <span id="lang-indicator">BN</span>
+                </button>
+                <button id="tts-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-cyan-500 custom-card hover:bg-slate-500/10 transition" title="ভয়েস রিডিং">
+                    <i class="fa-solid fa-volume-high text-sm"></i>
                 </button>
                 <button id="profile-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-indigo-500 custom-card hover:bg-slate-500/10 transition" title="ইউজার প্রোফাইল">
                     <i class="fa-solid fa-user text-sm"></i>
@@ -234,7 +387,7 @@
 
     <main class="max-w-7xl mx-auto px-4 py-4 w-full flex-grow flex flex-col items-center justify-start">
 
-        <div id="quote-widget-banner" class="w-full max-w-5xl p-3 mb-4 rounded-xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/5 to-violet-500/5 backdrop-blur-md flex items-center justify-between gap-4 shadow-sm">
+        <div id="quote-widget-banner" class="w-full max-w-5xl p-3 mb-4 rounded-xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/5 to-violet-500/5 backdrop-blur-md flex items-center justify-between gap-4 shadow-sm no-print">
             <div class="flex items-center gap-3">
                 <div class="text-indigo-500 text-base flex-shrink-0 animate-pulse">
                     <i class="fa-solid fa-heart-pulse"></i>
@@ -246,8 +399,8 @@
             </button>
         </div>
 
-        <div id="setup-section" class="w-full max-w-5xl custom-card border rounded-2xl p-5 shadow-xl space-y-4">
-            
+        <div id="setup-section" class="w-full max-w-5xl custom-card border rounded-2xl p-5 shadow-xl space-y-4 no-print">
+
             <div id="resume-banner" class="hidden p-3 rounded-xl state-selected border flex items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-clock-rotate-left text-base text-indigo-500"></i>
@@ -257,6 +410,32 @@
                     <i class="fa-solid fa-rotate-right text-[10px]"></i> <span data-i18n="recover_btn">রিকভার</span>
                 </button>
             </div>
+
+            <details class="bg-slate-500/5 p-3.5 rounded-xl border custom-border group">
+                <summary class="cursor-pointer text-xs font-bold uppercase tracking-wider custom-text-muted flex items-center gap-2"><i class="fa-solid fa-sliders text-indigo-500"></i> <span data-i18n="advanced_settings">অ্যাডভান্সড সেটিংস</span> <i class="fa-solid fa-chevron-down ml-auto group-open:rotate-180 transition-transform"></i></summary>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-3 pt-3 border-t custom-border">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="shuffle-questions" class="accent-indigo-600 w-4 h-4">
+                        <label for="shuffle-questions" class="text-xs font-semibold custom-text-title" data-i18n="shuffle_questions">প্রশ্ন শাফল</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="shuffle-options" class="accent-indigo-600 w-4 h-4">
+                        <label for="shuffle-options" class="text-xs font-semibold custom-text-title" data-i18n="shuffle_options">অপশন শাফল</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="enable-tts" class="accent-indigo-600 w-4 h-4">
+                        <label for="enable-tts" class="text-xs font-semibold custom-text-title" data-i18n="enable_tts">ভয়েস রিডিং</label>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="pass_mark_label">পাস মার্ক (%):</label>
+                        <input type="number" id="pass-mark" value="40" min="0" max="100" class="w-full custom-input border rounded-xl p-2 text-center font-bold text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="tag_filter_label">ট্যাগ ফিল্টার:</label>
+                        <input type="text" id="tag-filter-input" placeholder="যেমন: Anatomy" class="w-full custom-input border rounded-xl p-2 text-center font-bold text-xs">
+                    </div>
+                </div>
+            </details>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-slate-500/5 p-3.5 rounded-xl border custom-border">
                 <div class="md:col-span-4 space-y-1">
@@ -325,20 +504,25 @@
             </button>
         </div>
 
-        <div id="exam-section" class="hidden w-full flex flex-col lg:flex-row gap-6 items-stretch max-w-6xl mt-2">
-            
+        <div id="exam-section" class="hidden w-full flex flex-col lg:flex-row gap-6 items-stretch max-w-6xl mt-2 no-print">
+
             <div class="flex-grow custom-card border rounded-2xl p-5 shadow-xl flex flex-col justify-between max-w-4xl">
                 <div class="w-full">
                     <div class="w-full custom-bg border custom-border h-2 rounded-full mb-5 overflow-hidden">
                         <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-violet-400 h-full w-0 transition-all duration-300"></div>
                     </div>
-                    
+
                     <div id="single-view-container" class="space-y-4">
-                        <div class="flex justify-between items-center mb-2">
+                        <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
                             <span id="question-counter" class="bg-indigo-500/10 text-indigo-500 text-xs font-bold px-3 py-1.5 rounded-lg border border-indigo-500/20">প্রশ্ন নম্বর: ০/০</span>
-                            <button id="bookmark-toggle-btn" class="text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-500/20 text-amber-500 hover:bg-amber-500/10 transition flex items-center gap-1.5">
-                                <i id="bookmark-icon" class="fa-regular fa-bookmark"></i> <span id="bookmark-text" data-i18n="bookmark_btn">বুকমার্ক করুন</span>
-                            </button>
+                            <div class="flex gap-2">
+                                <button id="tts-speak-btn" class="text-xs font-bold px-2.5 py-1.5 rounded-lg border border-cyan-500/20 text-cyan-500 hover:bg-cyan-500/10 transition flex items-center gap-1" title="পড়ে শোনাও">
+                                    <i class="fa-solid fa-play text-[10px]"></i> <span data-i18n="tts_speak">শুনুন</span>
+                                </button>
+                                <button id="bookmark-toggle-btn" class="text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-500/20 text-amber-500 hover:bg-amber-500/10 transition flex items-center gap-1.5">
+                                    <i id="bookmark-icon" class="fa-regular fa-bookmark"></i> <span id="bookmark-text" data-i18n="bookmark_btn">বুকমার্ক করুন</span>
+                                </button>
+                            </div>
                         </div>
                         <h3 id="question-text" class="text-lg md:text-xl font-bold custom-text-title mb-5 leading-relaxed">প্রশ্ন লোড হচ্ছে...</h3>
                         <div id="options-container" class="space-y-3"></div>
@@ -375,12 +559,11 @@
         </div>
 
         <div id="result-section" class="hidden w-full max-w-4xl space-y-6 mt-2">
-            
+
             <div class="border custom-card rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="text-center md:text-left space-y-2">
                     <h2 class="text-2xl font-black custom-text-title" data-i18n="result_title">পরীক্ষার পারফরম্যান্স রিপোর্ট কার্ড</h2>
                     <p class="text-slate-400 text-sm custom-text-body" data-i18n="result_subtitle">নেগেটিভ মার্কিং ডিডাক্ট করে চূড়ান্ত মেরিট স্কোর হিসাব করা হয়েছে।</p>
-                    
                     <div class="flex flex-wrap gap-2.5 pt-2 text-xs font-bold justify-center md:justify-start">
                         <span id="stat-total" class="px-3 py-2 custom-input border rounded-xl">মোট প্রশ্ন: ০</span>
                         <span id="stat-correct" class="px-3 py-2 state-success border rounded-xl">সঠিক: ০</span>
@@ -388,9 +571,10 @@
                         <span id="stat-accuracy" class="px-3 py-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-500 rounded-xl">নির্ভুলতা: ০%</span>
                         <span id="stat-deducted" class="px-3 py-2 state-info border rounded-xl">কাটা নম্বর: ০.০০</span>
                         <span id="stat-skipped" class="px-3 py-2 custom-bg border rounded-xl custom-text-muted">স্কিপ: ০</span>
+                        <span id="stat-pass-fail" class="px-3 py-2 font-bold rounded-xl border"></span>
                     </div>
                 </div>
-                
+
                 <div class="relative flex items-center justify-center">
                     <svg class="w-32 h-32 transform -rotate-90">
                         <circle cx="64" cy="64" r="52" stroke="var(--border-main)" stroke-width="10" fill="transparent" />
@@ -403,10 +587,31 @@
                 </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+            <div id="analytics-dashboard" class="border custom-card rounded-2xl p-5 shadow-xl space-y-4">
+                <h3 class="text-base font-bold custom-text-title flex items-center gap-2"><i class="fa-solid fa-chart-pie text-cyan-400"></i> <span data-i18n="analytics_title">পারফরম্যান্স অ্যানালিটিক্স</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="relative h-64">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <div class="relative h-64">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                <div id="leaderboard-section" class="mt-4 p-4 rounded-xl custom-input border">
+                    <h4 class="text-xs font-bold custom-text-muted mb-2 uppercase tracking-wider"><i class="fa-solid fa-trophy text-amber-500"></i> <span data-i18n="leaderboard_title">লিডারবোর্ড (সর্বশেষ ১০ টেস্ট)</span></h4>
+                    <div id="leaderboard-list" class="space-y-1.5 max-h-48 overflow-y-auto text-xs"></div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 no-print">
                 <h3 class="text-lg font-bold custom-text-title flex items-center gap-2"><i class="fa-solid fa-rectangle-list text-cyan-400"></i> <span data-i18n="review_title">প্রশ্নপত্র ও উত্তর পর্যালোচনা</span></h3>
-                
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <button id="share-btn" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm rounded-xl transition shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-share-nodes"></i> <span data-i18n="share_btn">শেয়ার</span>
+                    </button>
+                    <button id="print-btn" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm rounded-xl transition shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i> <span data-i18n="print_btn">প্রিন্ট</span>
+                    </button>
                     <button id="save-file-btn" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition shadow-md">
                         <i class="fa-solid fa-file-arrow-down"></i> <span data-i18n="save_report_btn">রিপোর্ট ফাইল সেভ করুন</span>
                     </button>
@@ -421,8 +626,7 @@
 
     </main>
 
-    <!-- Profile Overlay Modal -->
-    <div id="profile-modal" class="hidden fixed inset-0 z-[100] overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="profile-modal" class="hidden fixed inset-0 z-[100] overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
         <div class="w-full max-w-md custom-card border rounded-2xl p-6 shadow-2xl relative space-y-4">
             <button id="close-profile-btn" class="absolute top-4 right-4 w-7 h-7 rounded-lg bg-slate-500/5 border custom-border custom-text-muted hover:text-rose-500 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-xs"></i>
@@ -469,12 +673,11 @@
         </div>
     </div>
 
-    <footer class="border-t custom-border bg-slate-950/10 py-3 text-center text-xs custom-text-muted">
+    <footer class="border-t custom-border bg-slate-950/10 py-3 text-center text-xs custom-text-muted no-print">
         <p>&copy; 2026 ExamPulse Pro Portal | MD Irfun Sadi Topu 🩺</p>
     </footer>
 
     <script>
-        // ==================== TRANSLATION ENGINE ====================
         const translations = {
             bn: {
                 header_subtitle: 'স্মার্ট এক্সাম সিস্টেম',
@@ -558,6 +761,22 @@
                 loading_question: 'প্রশ্ন লোড হচ্ছে...',
                 library_default_option: '-- লাইব্রেরি থেকে সিলেক্ট করুন --',
                 file_upload_success_html: '<i class="fa-solid fa-circle-check text-emerald-500"></i> আপলোড সফল',
+                advanced_settings: 'অ্যাডভান্সড সেটিংস',
+                shuffle_questions: 'প্রশ্ন শাফল',
+                shuffle_options: 'অপশন শাফল',
+                enable_tts: 'ভয়েস রিডিং',
+                pass_mark_label: 'পাস মার্ক (%):',
+                tag_filter_label: 'ট্যাগ ফিল্টার:',
+                tts_speak: 'শুনুন',
+                tts_stop: 'থামান',
+                analytics_title: 'পারফরম্যান্স অ্যানালিটিক্স',
+                leaderboard_title: 'লিডারবোর্ড (সর্বশেষ ১০ টেস্ট)',
+                share_btn: 'শেয়ার',
+                print_btn: 'প্রিন্ট',
+                pass_text: 'পাস',
+                fail_text: 'ফেল',
+                share_title: 'ExamPulse Pro-তে আমার পরীক্ষার রেজাল্ট দেখো!',
+                share_text: 'আমি {score} স্কোর করেছি {total} প্রশ্নের মধ্যে! নির্ভুলতা: {accuracy}%',
             },
             en: {
                 header_subtitle: 'Smart Exam System',
@@ -641,6 +860,22 @@
                 loading_question: 'Loading question...',
                 library_default_option: '-- Select from Library --',
                 file_upload_success_html: '<i class="fa-solid fa-circle-check text-emerald-500"></i> Upload Successful',
+                advanced_settings: 'Advanced Settings',
+                shuffle_questions: 'Shuffle Questions',
+                shuffle_options: 'Shuffle Options',
+                enable_tts: 'Voice Reading',
+                pass_mark_label: 'Pass Mark (%):',
+                tag_filter_label: 'Tag Filter:',
+                tts_speak: 'Speak',
+                tts_stop: 'Stop',
+                analytics_title: 'Performance Analytics',
+                leaderboard_title: 'Leaderboard (Last 10 Tests)',
+                share_btn: 'Share',
+                print_btn: 'Print',
+                pass_text: 'Pass',
+                fail_text: 'Fail',
+                share_title: 'Check out my exam result on ExamPulse Pro!',
+                share_text: 'I scored {score} out of {total} questions! Accuracy: {accuracy}%',
             }
         };
 
@@ -662,6 +897,8 @@
         ];
 
         let currentLang = 'bn';
+        let ttsEnabled = false;
+        let ttsUtterance = null;
 
         function t(key, replacements = {}) {
             let str = (translations[currentLang] && translations[currentLang][key]) ?
@@ -684,6 +921,16 @@
                 String.fromCharCode(0x0995 + idx);
         }
 
+        // Fisher-Yates shuffle
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
         // ==================== GLOBAL STATE ====================
         let masterQuestions = [];
         let activeQuestions = [];
@@ -693,12 +940,19 @@
         let negativeMarkVal = 0.25;
         let examMode = "exam";
         let viewMode = "single";
+        let shuffleQuestionsEnabled = false;
+        let shuffleOptionsEnabled = false;
+        let passMarkPercent = 40;
+        let tagFilterText = '';
 
         let examTimer = null;
         let totalSeconds = 0;
         let secondsRemaining = 0;
         let isTimerPaused = false;
         let stopwatchElapsed = 0;
+
+        let pieChartInstance = null;
+        let barChartInstance = null;
 
         // ==================== DOM REFS ====================
         const setupSection = document.getElementById('setup-section');
@@ -754,6 +1008,73 @@
         const langToggleBtn = document.getElementById('lang-toggle-btn');
         const langIndicator = document.getElementById('lang-indicator');
         const entranceOverlay = document.getElementById('entrance-overlay');
+        const ttsToggleBtn = document.getElementById('tts-toggle-btn');
+        const ttsSpeakBtn = document.getElementById('tts-speak-btn');
+        const shuffleQuestionsCheck = document.getElementById('shuffle-questions');
+        const shuffleOptionsCheck = document.getElementById('shuffle-options');
+        const enableTtsCheck = document.getElementById('enable-tts');
+        const passMarkInput = document.getElementById('pass-mark');
+        const tagFilterInput = document.getElementById('tag-filter-input');
+        const shareBtn = document.getElementById('share-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        // ==================== TTS ENGINE ====================
+        function stopTTS() {
+            if (ttsUtterance) {
+                speechSynthesis.cancel();
+                ttsUtterance = null;
+            }
+            document.querySelectorAll('.tts-highlight').forEach(el => el.classList.remove('tts-highlight'));
+        }
+
+        function speakText(text, elementToHighlight = null) {
+            if (!ttsEnabled) return;
+            stopTTS();
+            if (elementToHighlight) {
+                elementToHighlight.classList.add('tts-highlight');
+                setTimeout(() => elementToHighlight.classList.remove('tts-highlight'), 3000);
+            }
+            ttsUtterance = new SpeechSynthesisUtterance(text);
+            ttsUtterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+            ttsUtterance.rate = 0.9;
+            ttsUtterance.onend = () => {
+                ttsUtterance = null;
+                if (elementToHighlight) elementToHighlight.classList.remove('tts-highlight');
+            };
+            speechSynthesis.speak(ttsUtterance);
+        }
+
+        function speakCurrentQuestion() {
+            if (!activeQuestions || activeQuestions.length === 0) return;
+            const q = activeQuestions[currentIndex];
+            let text = q.q + '। ';
+            q.options.forEach((opt, idx) => {
+                text += getOptionLetter(idx) + '। ' + opt + '। ';
+            });
+            speakText(text, questionText);
+        }
+
+        ttsToggleBtn.addEventListener('click', () => {
+            ttsEnabled = !ttsEnabled;
+            if (ttsEnabled) {
+                ttsToggleBtn.classList.add('bg-cyan-500/20', 'border-cyan-500');
+            } else {
+                ttsToggleBtn.classList.remove('bg-cyan-500/20', 'border-cyan-500');
+                stopTTS();
+            }
+            enableTtsCheck.checked = ttsEnabled;
+        });
+
+        ttsSpeakBtn.addEventListener('click', speakCurrentQuestion);
+        enableTtsCheck.addEventListener('change', () => {
+            ttsEnabled = enableTtsCheck.checked;
+            if (ttsEnabled) {
+                ttsToggleBtn.classList.add('bg-cyan-500/20', 'border-cyan-500');
+            } else {
+                ttsToggleBtn.classList.remove('bg-cyan-500/20', 'border-cyan-500');
+                stopTTS();
+            }
+        });
 
         // ==================== LANGUAGE SWITCH ====================
         function switchLanguage() {
@@ -783,9 +1104,7 @@
                 const translated = t(key);
                 if (el.tagName === 'OPTION' && el.hasAttribute('data-i18n')) {
                     el.textContent = translated;
-                } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    // skip – placeholder handled separately
-                } else {
+                } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {} else {
                     el.textContent = translated;
                 }
             });
@@ -812,10 +1131,14 @@
                 bookmarkText.textContent = bookmarks[currentIndex] ? t('bookmarked') : t('bookmark_btn');
             }
             if (activeQuestions && activeQuestions.length > 0 && questionCounter) {
-                questionCounter.textContent = t('question_counter', { current: currentIndex + 1, total: activeQuestions.length });
+                questionCounter.textContent = t('question_counter', { current: currentIndex + 1, total: activeQuestions
+                        .length });
             }
             const startBtnSpan = startBtn.querySelector('span[data-i18n]');
             if (startBtnSpan) startBtnSpan.textContent = t('start_exam_btn');
+            const ttsSpeakSpan = ttsSpeakBtn.querySelector('span[data-i18n]');
+            if (ttsSpeakSpan) ttsSpeakSpan.textContent = t('tts_speak');
+            updateLeaderboardUI();
         }
 
         langToggleBtn.addEventListener('click', switchLanguage);
@@ -825,9 +1148,40 @@
             setTimeout(() => {
                 entranceOverlay.classList.add('fade-out');
                 setTimeout(() => {
-                    if (entranceOverlay.parentNode) entranceOverlay.parentNode.removeChild(entranceOverlay);
+                    if (entranceOverlay.parentNode) entranceOverlay.parentNode.removeChild(
+                        entranceOverlay);
                 }, 750);
             }, 2200);
+        });
+
+        // ==================== SYSTEM THEME DETECTION ====================
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function applySystemTheme() {
+            const savedTheme = localStorage.getItem('exampulse_theme_mode');
+            if (savedTheme) {
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-theme');
+                    themeIcon.className = "fa-solid fa-sun";
+                } else {
+                    document.body.classList.remove('light-theme');
+                    themeIcon.className = "fa-solid fa-moon";
+                }
+            } else {
+                if (systemDark.matches) {
+                    document.body.classList.remove('light-theme');
+                    themeIcon.className = "fa-solid fa-moon";
+                } else {
+                    document.body.classList.add('light-theme');
+                    themeIcon.className = "fa-solid fa-sun";
+                }
+            }
+        }
+        systemDark.addEventListener('change', () => {
+            if (!localStorage.getItem('exampulse_theme_mode')) {
+                applySystemTheme();
+                if (activeQuestions && activeQuestions.length > 0) renderActiveQuestionState();
+            }
         });
 
         // ==================== BOOTSTRAP ====================
@@ -848,18 +1202,67 @@
                 'ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল' :
                 'ExamPulse Pro - Premium MCQ Exam Portal';
 
-            const savedTheme = localStorage.getItem('exampulse_theme_mode');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-                themeIcon.className = "fa-solid fa-sun";
-            }
+            applySystemTheme();
             loadRandomMotivationalQuote();
             syncLibraryDropdownMenu();
             inspectCachedProgressTokens();
             initializeProfileSystemEngine();
             updateAllUILabels();
             handleExamModeFieldToggleUI();
+            loadAdvancedSettingsFromCache();
         }
+
+        function loadAdvancedSettingsFromCache() {
+            const cache = JSON.parse(localStorage.getItem('exampulse_advanced_settings') || '{}');
+            shuffleQuestionsCheck.checked = cache.shuffleQuestions || false;
+            shuffleOptionsCheck.checked = cache.shuffleOptions || false;
+            enableTtsCheck.checked = cache.enableTts || false;
+            passMarkInput.value = cache.passMark || 40;
+            tagFilterInput.value = cache.tagFilter || '';
+            shuffleQuestionsEnabled = shuffleQuestionsCheck.checked;
+            shuffleOptionsEnabled = shuffleOptionsCheck.checked;
+            ttsEnabled = enableTtsCheck.checked;
+            passMarkPercent = parseInt(passMarkInput.value) || 40;
+            tagFilterText = tagFilterInput.value.trim();
+            if (ttsEnabled) {
+                ttsToggleBtn.classList.add('bg-cyan-500/20', 'border-cyan-500');
+            }
+        }
+
+        function saveAdvancedSettingsToCache() {
+            const settings = {
+                shuffleQuestions: shuffleQuestionsCheck.checked,
+                shuffleOptions: shuffleOptionsCheck.checked,
+                enableTts: enableTtsCheck.checked,
+                passMark: passMarkInput.value,
+                tagFilter: tagFilterInput.value
+            };
+            localStorage.setItem('exampulse_advanced_settings', JSON.stringify(settings));
+        }
+
+        shuffleQuestionsCheck.addEventListener('change', () => {
+            shuffleQuestionsEnabled = shuffleQuestionsCheck.checked;
+            saveAdvancedSettingsToCache();
+        });
+        shuffleOptionsCheck.addEventListener('change', () => {
+            shuffleOptionsEnabled = shuffleOptionsCheck.checked;
+            saveAdvancedSettingsToCache();
+        });
+        enableTtsCheck.addEventListener('change', () => {
+            ttsEnabled = enableTtsCheck.checked;
+            if (ttsEnabled) ttsToggleBtn.classList.add('bg-cyan-500/20', 'border-cyan-500');
+            else { ttsToggleBtn.classList.remove('bg-cyan-500/20', 'border-cyan-500');
+                stopTTS(); }
+            saveAdvancedSettingsToCache();
+        });
+        passMarkInput.addEventListener('change', () => {
+            passMarkPercent = parseInt(passMarkInput.value) || 40;
+            saveAdvancedSettingsToCache();
+        });
+        tagFilterInput.addEventListener('input', () => {
+            tagFilterText = tagFilterInput.value.trim();
+            saveAdvancedSettingsToCache();
+        });
 
         function initializeProfileSystemEngine() {
             const defaultMetadata = {
@@ -870,7 +1273,8 @@
                 lastScore: "০.০০",
                 totalCorrect: 0,
                 totalWrong: 0,
-                lastAccuracy: 0
+                lastAccuracy: 0,
+                totalSkipped: 0
             };
             let cache = JSON.parse(localStorage.getItem('exampulse_profile_data'));
             if (!cache) {
@@ -882,7 +1286,9 @@
             document.getElementById('profile-email').value = cache.email || '';
             document.getElementById('profile-stat-exams').innerText = cache.totalExams || 0;
             document.getElementById('profile-stat-score').innerText = cache.lastScore || '০.০০';
-            const acc = cache.lastAccuracy !== undefined ? cache.lastAccuracy : (cache.totalCorrect !== undefined && cache.totalWrong !== undefined && (cache.totalCorrect + cache.totalWrong) > 0 ? Math.round((cache.totalCorrect / (cache.totalCorrect + cache.totalWrong)) * 100) : 0);
+            const acc = cache.lastAccuracy !== undefined ? cache.lastAccuracy : (cache.totalCorrect !== undefined &&
+                cache.totalWrong !== undefined && (cache.totalCorrect + cache.totalWrong) > 0 ? Math.round((cache
+                    .totalCorrect / (cache.totalCorrect + cache.totalWrong)) * 100) : 0);
             document.getElementById('profile-stat-accuracy').innerText = acc + '%';
         }
 
@@ -1005,7 +1411,18 @@
             }
         }
 
+        function applyTagFilter(questions) {
+            if (!tagFilterText) return questions;
+            return questions.filter(q => {
+                if (q.tags && Array.isArray(q.tags)) {
+                    return q.tags.some(tag => tag.toLowerCase().includes(tagFilterText.toLowerCase()));
+                }
+                return true;
+            });
+        }
+
         function initiateExamRoutine(isResumeRequested) {
+            stopTTS();
             if (isResumeRequested) {
                 const cache = JSON.parse(localStorage.getItem('exampulse_active_session'));
                 masterQuestions = cache.masterQuestions;
@@ -1020,6 +1437,8 @@
                 totalSeconds = cache.totalSeconds;
                 stopwatchElapsed = cache.stopwatchElapsed || 0;
                 isTimerPaused = cache.isTimerPaused || false;
+                shuffleQuestionsEnabled = cache.shuffleQuestionsEnabled || false;
+                shuffleOptionsEnabled = cache.shuffleOptionsEnabled || false;
             } else {
                 const raw = jsonInput.value.trim();
                 if (!raw) return alert(t('json_required_alert'));
@@ -1030,7 +1449,23 @@
                 let end = parseInt(rangeEnd.value) || masterQuestions.length;
                 if (start < 1) start = 1;
                 if (end > masterQuestions.length) end = masterQuestions.length;
-                activeQuestions = masterQuestions.slice(start - 1, end);
+                let selected = masterQuestions.slice(start - 1, end);
+                selected = applyTagFilter(selected);
+                if (shuffleQuestionsEnabled) selected = shuffleArray(selected);
+                activeQuestions = selected.map(q => {
+                    if (shuffleOptionsEnabled) {
+                        const indices = [...Array(q.options.length).keys()];
+                        const shuffledIndices = shuffleArray(indices);
+                        const correctIndex = q.correct;
+                        const newCorrect = shuffledIndices.indexOf(correctIndex);
+                        return {
+                            ...q,
+                            options: shuffledIndices.map(i => q.options[i]),
+                            correct: newCorrect
+                        };
+                    }
+                    return q;
+                });
                 if (activeQuestions.length === 0) return alert(t('range_empty_alert'));
                 currentIndex = 0;
                 userAnswers = new Array(activeQuestions.length).fill(null);
@@ -1052,6 +1487,7 @@
             setupSection.classList.add('hidden');
             resumeBanner.classList.add('hidden');
             examSection.classList.remove('hidden');
+            resultSection.classList.add('hidden');
             liveTimerContainer.classList.remove('hidden');
             if (negativeMarkVal > 0) activeNegativeBadge.classList.remove('hidden');
             generateNavigationGridOMR();
@@ -1076,7 +1512,9 @@
                 secondsRemaining,
                 totalSeconds,
                 stopwatchElapsed,
-                isTimerPaused
+                isTimerPaused,
+                shuffleQuestionsEnabled,
+                shuffleOptionsEnabled
             };
             localStorage.setItem('exampulse_active_session', JSON.stringify(packageBundle));
         }
@@ -1085,28 +1523,29 @@
             clearInterval(examTimer);
             refreshTimerUI();
             examTimer = setInterval(() => {
-                if (examMode === 'poll' && viewMode === 'list') {
-                    stopwatchElapsed++;
-                } else {
-                    if (!isTimerPaused) {
-                        secondsRemaining--;
-                    }
-                }
-                refreshTimerUI();
-                if (secondsRemaining % 5 === 0) cacheStateToLocalStorage();
-                if (examMode === 'exam' && secondsRemaining <= 0) {
-                    clearInterval(examTimer);
-                    alert(t('time_up_alert'));
-                    compileFinalPerformanceReport();
-                } else if (examMode === 'poll' && viewMode === 'single' && secondsRemaining <= 0) {
-                    isTimerPaused = true;
-                    if (userAnswers[currentIndex] === null) {
-                        userAnswers[currentIndex] = -1;
-                    }
-                    cacheStateToLocalStorage();
-                    renderActiveQuestionState();
-                }
-            }, 1000);
+    if (examMode === 'poll' && viewMode === 'list') {
+        stopwatchElapsed++;
+    } else {
+        if (!isTimerPaused) {
+            secondsRemaining--;
+            if (secondsRemaining < 0) secondsRemaining = 0; // negative prevent
+        }
+    }
+    refreshTimerUI();
+    if (secondsRemaining % 5 === 0) cacheStateToLocalStorage();
+    if (examMode === 'exam' && secondsRemaining <= 0) {
+        clearInterval(examTimer);
+        alert(t('time_up_alert'));
+        compileFinalPerformanceReport();
+    } else if (examMode === 'poll' && viewMode === 'single' && secondsRemaining <= 0) {
+        isTimerPaused = true;
+        if (userAnswers[currentIndex] === null) {
+            userAnswers[currentIndex] = -1;
+        }
+        cacheStateToLocalStorage();
+        renderActiveQuestionState();
+    }
+}, 1000);
         }
 
         function refreshTimerUI() {
@@ -1130,7 +1569,7 @@
                 listViewContainer.classList.add('hidden');
                 singleNavControls.classList.remove('hidden');
                 if (examMode === 'poll') {
-                    isTimerPaused = userAnswers[currentIndex] !== null;
+                    isTimerPaused = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== -1;
                 }
                 renderSingleQuestionCanvas();
             } else {
@@ -1140,15 +1579,21 @@
                 syncListViewDOMStates();
             }
             let answeredCount = userAnswers.filter(ans => ans !== null && ans !== -1).length;
-            let progressPercentage = viewMode === 'single' ? ((currentIndex + 1) / activeQuestions.length) * 100 : (answeredCount / activeQuestions.length) * 100;
+            let progressPercentage = viewMode === 'single' ? ((currentIndex + 1) / activeQuestions.length) * 100 : (
+                answeredCount / activeQuestions.length) * 100;
             progressBar.style.width = `${progressPercentage}%`;
             syncGridNavigatorStyles();
             updateAllUILabels();
+            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                MathJax.typesetPromise([questionText, optionsContainer, listViewContainer]).catch(err => console.log(
+                    'MathJax error:', err));
+            }
         }
 
         function renderSingleQuestionCanvas() {
             const targetQ = activeQuestions[currentIndex];
-            questionCounter.textContent = t('question_counter', { current: currentIndex + 1, total: activeQuestions.length });
+            questionCounter.textContent = t('question_counter', { current: currentIndex + 1, total: activeQuestions
+                    .length });
             questionText.innerText = targetQ.q;
             if (bookmarks[currentIndex]) {
                 bookmarkIcon.className = "fa-solid fa-bookmark text-amber-500";
@@ -1157,13 +1602,16 @@
                 bookmarkIcon.className = "fa-regular fa-bookmark";
                 bookmarkText.textContent = t('bookmark_btn');
             }
+            const ttsSpeakSpan = ttsSpeakBtn.querySelector('span[data-i18n]');
+            if (ttsSpeakSpan) ttsSpeakSpan.textContent = t('tts_speak');
             optionsContainer.innerHTML = '';
             instantPollFeedback.classList.add('hidden');
             instantPollFeedback.innerHTML = '';
             const isCurrentQuestionAnswered = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== -1;
             targetQ.options.forEach((opt, idx) => {
                 const isSelected = userAnswers[currentIndex] === idx;
-                let optClasses = "p-4 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input ";
+                let optClasses =
+                    "p-4 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input ";
                 if (examMode === 'poll' && isCurrentQuestionAnswered) {
                     optClasses += "pointer-events-none ";
                     if (idx === targetQ.correct) optClasses += "state-success font-semibold shadow-sm ";
@@ -1173,12 +1621,14 @@
                     optClasses += "pointer-events-none opacity-40 ";
                 } else {
                     if (isSelected) optClasses += "state-selected font-semibold shadow-md ";
-                    else optClasses += "hover:border-slate-400 dark:hover:border-slate-700/80 ";
+                    else optClasses +=
+                        "hover:border-slate-400 dark:hover:border-slate-700/80 ";
                 }
                 const card = document.createElement('div');
                 card.className = optClasses;
                 card.onclick = () => {
-                    if (examMode === 'poll' && (isCurrentQuestionAnswered || userAnswers[currentIndex] === -1)) return;
+                    if (examMode === 'poll' && (isCurrentQuestionAnswered || userAnswers[currentIndex] === -
+                        1)) return;
                     userAnswers[currentIndex] = idx;
                     if (examMode === 'poll') isTimerPaused = true;
                     cacheStateToLocalStorage();
@@ -1186,10 +1636,16 @@
                 };
                 let checkMarker = "";
                 if (examMode === 'poll' && (isCurrentQuestionAnswered || userAnswers[currentIndex] === -1)) {
-                    if (idx === targetQ.correct) checkMarker = '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-500 text-base"></i>';
-                    else if (isSelected) checkMarker = '<i class="fa-solid fa-circle-xmark text-rose-600 dark:text-rose-500 text-base"></i>';
+                    if (idx === targetQ.correct)
+                        checkMarker =
+                        '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-500 text-base"></i>';
+                    else if (isSelected)
+                        checkMarker =
+                        '<i class="fa-solid fa-circle-xmark text-rose-600 dark:text-rose-500 text-base"></i>';
                 } else {
-                    checkMarker = isSelected ? '<div class="w-2 h-2 rounded-full bg-indigo-600 dark:bg-white"></div>' : '';
+                    checkMarker = isSelected ?
+                        '<div class="w-2 h-2 rounded-full bg-indigo-600 dark:bg-white"></div>' :
+                        '';
                 }
                 const letter = getOptionLetter(idx);
                 card.innerHTML = `
@@ -1213,7 +1669,8 @@
                 let alertString = isUserCorrect ? t('correct_answer') :
                     isTimeout ? t('timeout_correct_is', { correct: correctLetter }) :
                     t('wrong_answer_correct_is', { correct: correctLetter });
-                let iconClass = isUserCorrect ? 'fa-solid fa-face-smile text-base' : 'fa-solid fa-circle-exclamation text-base';
+                let iconClass = isUserCorrect ? 'fa-solid fa-face-smile text-base' :
+                    'fa-solid fa-circle-exclamation text-base';
                 instantPollFeedback.innerHTML = `
                     <div class="p-4 rounded-xl border ${isUserCorrect ? 'state-success' : 'state-error'} text-xs font-bold mb-3 flex items-center gap-2">
                         <i class="${iconClass}"></i>
@@ -1270,43 +1727,56 @@
                 const isAnswered = ua !== null && ua !== -1;
                 const isTimeout = ua === -1;
                 const bIcon = document.getElementById(`list-bookmark-icon-${qIdx}`);
-                if (bIcon) bIcon.className = bookmarks[qIdx] ? "fa-solid fa-bookmark text-amber-500" : "fa-regular fa-bookmark";
+                if (bIcon) bIcon.className = bookmarks[qIdx] ?
+                    "fa-solid fa-bookmark text-amber-500" : "fa-regular fa-bookmark";
                 q.options.forEach((opt, oIdx) => {
                     const row = document.getElementById(`list-opt-${qIdx}-${oIdx}`);
                     const num = document.getElementById(`list-opt-num-${qIdx}-${oIdx}`);
-                    const circle = document.getElementById(`list-opt-circle-${qIdx}-${oIdx}`);
+                    const circle = document.getElementById(
+                        `list-opt-circle-${qIdx}-${oIdx}`);
                     if (!row) return;
-                    row.className = "p-3 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input ";
-                    num.className = "w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded-lg ";
-                    circle.className = "w-4 h-4 rounded-full border flex items-center justify-center ";
+                    row.className =
+                        "p-3 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input ";
+                    num.className =
+                        "w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded-lg ";
+                    circle.className =
+                        "w-4 h-4 rounded-full border flex items-center justify-center ";
                     circle.innerHTML = '';
                     if (examMode === 'poll' && (isAnswered || isTimeout)) {
                         row.classList.add("pointer-events-none");
                         if (oIdx === q.correct) {
                             row.className += "state-success font-semibold shadow-sm ";
                             num.className += "bg-emerald-600 text-white ";
-                            circle.className += "border-emerald-500 bg-emerald-600 ";
-                            circle.innerHTML = '<i class="fa-solid fa-check text-[9px] text-white"></i>';
+                            circle.className +=
+                                "border-emerald-500 bg-emerald-600 ";
+                            circle.innerHTML =
+                                '<i class="fa-solid fa-check text-[9px] text-white"></i>';
                         } else if (oIdx === ua && ua !== -1) {
                             row.className += "state-error font-semibold ";
                             num.className += "bg-rose-600 text-white ";
                             circle.className += "border-rose-500 bg-rose-600 ";
-                            circle.innerHTML = '<i class="fa-solid fa-xmark text-[9px] text-white"></i>';
+                            circle.innerHTML =
+                                '<i class="fa-solid fa-xmark text-[9px] text-white"></i>';
                         } else {
                             row.classList.add("opacity-40");
                             num.className += "bg-slate-500/10 custom-text-muted ";
-                            circle.className += "border-slate-300 dark:border-slate-800 ";
+                            circle.className +=
+                                "border-slate-300 dark:border-slate-800 ";
                         }
                     } else {
                         if (oIdx === ua) {
                             row.className += "state-selected font-semibold ";
                             num.className += "bg-indigo-600 text-white ";
-                            circle.className += "border-indigo-500 bg-indigo-600 ";
-                            circle.innerHTML = '<div class="w-1.5 h-1.5 rounded-full bg-white"></div>';
+                            circle.className +=
+                                "border-indigo-500 bg-indigo-600 ";
+                            circle.innerHTML =
+                                '<div class="w-1.5 h-1.5 rounded-full bg-white"></div>';
                         } else {
-                            row.classList.add("hover:border-slate-400", "dark:hover:border-slate-700/80");
+                            row.classList.add("hover:border-slate-400",
+                                "dark:hover:border-slate-700/80");
                             num.className += "bg-slate-500/10 custom-text-body ";
-                            circle.className += "border-slate-300 dark:border-slate-800 ";
+                            circle.className +=
+                                "border-slate-300 dark:border-slate-800 ";
                         }
                     }
                 });
@@ -1316,7 +1786,9 @@
                         feedback.classList.remove('hidden');
                         const isUserCorrect = ua === q.correct;
                         const correctLetter = getOptionLetter(q.correct);
-                        const alertStr = isUserCorrect ? t('correct_answer') : (isTimeout ? t('timeout_correct_is', { correct: correctLetter }) : t('wrong_answer_correct_is', { correct: correctLetter }));
+                        const alertStr = isUserCorrect ? t('correct_answer') : (isTimeout ? t(
+                            'timeout_correct_is', { correct: correctLetter }) : t(
+                            'wrong_answer_correct_is', { correct: correctLetter }));
                         feedback.innerHTML = `
                             <div class="mt-2.5 p-3 rounded-xl border ${isUserCorrect ? 'state-success' : 'state-error'} text-[11px] font-bold flex items-center gap-1.5">
                                 <i class="${isUserCorrect ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'}"></i>
@@ -1357,6 +1829,7 @@
         }
 
         function shiftActiveQuestionIndex(direction) {
+            stopTTS();
             let target = currentIndex + direction;
             if (target >= 0 && target < activeQuestions.length) {
                 currentIndex = target;
@@ -1379,14 +1852,17 @@
                 btn.innerText = idx + 1;
                 btn.onclick = () => {
                     if (viewMode === 'single') {
+                        stopTTS();
                         currentIndex = idx;
                         if (examMode === 'poll') {
-                            isTimerPaused = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== -1;
+                            isTimerPaused = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !==
+                                -1;
                             if (!isTimerPaused) secondsRemaining = totalSeconds;
                         }
                         renderActiveQuestionState();
                     } else {
-                        const cardElement = document.getElementById(`list-q-card-${idx}`);
+                        const cardElement = document.getElementById(
+                            `list-q-card-${idx}`);
                         if (cardElement) {
                             cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
@@ -1401,13 +1877,16 @@
             activeQuestions.forEach((_, idx) => {
                 const node = document.getElementById(`nav-cell-${idx}`);
                 if (!node) return;
-                let baseClasses = "p-2.5 text-xs font-bold rounded-xl border font-mono transition relative focus:outline-none ";
+                let baseClasses =
+                    "p-2.5 text-xs font-bold rounded-xl border font-mono transition relative focus:outline-none ";
                 if (bookmarks[idx]) {
-                    baseClasses += "ring-2 ring-amber-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-950 ";
+                    baseClasses +=
+                        "ring-2 ring-amber-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-950 ";
                 }
                 const answer = userAnswers[idx];
                 if (viewMode === 'single' && idx === currentIndex) {
-                    node.className = baseClasses + "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20";
+                    node.className = baseClasses +
+                        "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20";
                 } else if (answer !== null && answer !== -1) {
                     if (examMode === 'poll') {
                         const isNodeCorrect = answer === activeQuestions[idx].correct;
@@ -1418,7 +1897,8 @@
                 } else if (answer === -1) {
                     node.className = baseClasses + "state-info";
                 } else {
-                    node.className = baseClasses + "custom-input hover:border-slate-400 dark:hover:border-slate-800";
+                    node.className = baseClasses +
+                        "custom-input hover:border-slate-400 dark:hover:border-slate-800";
                 }
             });
         }
@@ -1435,20 +1915,66 @@
             }
         }
 
-        // ==================== UPDATED SCORING: TIMEOUT = SKIPPED ====================
+        // ==================== LEADERBOARD ====================
+        function saveToLeaderboard(finalScoreMetric, total, accuracyPct, totalAnswered) {
+            const profileCache = JSON.parse(localStorage.getItem('exampulse_profile_data')) || {};
+            const entry = {
+                name: profileCache.name || 'Anonymous',
+                score: finalScoreMetric,
+                total: total,
+                accuracy: accuracyPct,
+                date: new Date().toISOString(),
+                mode: examMode,
+                answered: totalAnswered
+            };
+            let leaderboard = JSON.parse(localStorage.getItem('exampulse_leaderboard') || '[]');
+            leaderboard.unshift(entry);
+            if (leaderboard.length > 10) leaderboard = leaderboard.slice(0, 10);
+            localStorage.setItem('exampulse_leaderboard', JSON.stringify(leaderboard));
+        }
+
+        function updateLeaderboardUI() {
+            const leaderboard = JSON.parse(localStorage.getItem('exampulse_leaderboard') || '[]');
+            const list = document.getElementById('leaderboard-list');
+            if (!list) return;
+            list.innerHTML = '';
+            if (leaderboard.length === 0) {
+                list.innerHTML =
+                    '<p class="text-xs custom-text-muted">এখনো কোনো টেস্ট ডাটা নেই।</p>';
+                return;
+            }
+            leaderboard.forEach((entry, idx) => {
+                const row = document.createElement('div');
+                row.className =
+                    "flex justify-between items-center p-2 rounded-lg custom-input border text-xs";
+                const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}.`;
+                row.innerHTML = `
+                    <span class="font-bold">${medal} ${entry.name}</span>
+                    <span class="text-indigo-500 font-bold">${entry.score.toFixed(2)}/${entry.total}</span>
+                    <span class="custom-text-muted">${entry.accuracy}%</span>
+                    <span class="text-[10px] custom-text-muted">${new Date(entry.date).toLocaleDateString()}</span>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        // ==================== COMPILE RESULT ====================
         function compileFinalPerformanceReport() {
             clearInterval(examTimer);
+            stopTTS();
             localStorage.removeItem('exampulse_active_session');
             examSection.classList.add('hidden');
             activeNegativeBadge.classList.add('hidden');
             liveTimerContainer.classList.add('hidden');
             resultSection.classList.remove('hidden');
             let total = activeQuestions.length;
-            let correct = 0, wrong = 0, skipped = 0;
+            let correct = 0,
+                wrong = 0,
+                skipped = 0;
             activeQuestions.forEach((q, idx) => {
                 const ans = userAnswers[idx];
                 if (ans === null || ans === -1) {
-                    skipped++;   // null = skipped, -1 = timed out → both are skipped
+                    skipped++;
                 } else if (ans === q.correct) {
                     correct++;
                 } else {
@@ -1459,6 +1985,7 @@
             let finalScoreMetric = correct - penaltyScore;
             let totalAnswered = correct + wrong;
             let accuracyPct = totalAnswered > 0 ? Math.round((correct / totalAnswered) * 100) : 0;
+            let passed = (finalScoreMetric / total) * 100 >= passMarkPercent;
 
             document.getElementById('stat-total').innerText = t('total_questions', { count: total });
             document.getElementById('stat-correct').innerText = t('correct_label', { count: correct });
@@ -1466,7 +1993,13 @@
             document.getElementById('stat-accuracy').innerText = t('accuracy_label', { pct: accuracyPct });
             document.getElementById('stat-deducted').innerText = t('deducted_label', { val: penaltyScore.toFixed(2) });
             document.getElementById('stat-skipped').innerText = t('skipped_label', { count: skipped });
-            document.getElementById('result-percent').innerText = `${finalScoreMetric.toFixed(2)} / ${total}`;
+            const passFailEl = document.getElementById('stat-pass-fail');
+            passFailEl.innerText = passed ? t('pass_text') : t('fail_text');
+            passFailEl.className = passed ?
+                'px-3 py-2 state-success border rounded-xl font-bold' :
+                'px-3 py-2 state-error border rounded-xl font-bold';
+            document.getElementById('result-percent').innerText =
+                `${finalScoreMetric.toFixed(2)} / ${total}`;
             const circ = 2 * Math.PI * 52;
             let conversionPct = finalScoreMetric > 0 ? (finalScoreMetric / total) * 100 : 0;
             document.getElementById('result-ring').style.strokeDashoffset = circ - (conversionPct / 100) * circ;
@@ -1476,13 +2009,67 @@
             profileCache.lastScore = `${finalScoreMetric.toFixed(2)} / ${total}`;
             profileCache.totalCorrect = (profileCache.totalCorrect || 0) + correct;
             profileCache.totalWrong = (profileCache.totalWrong || 0) + wrong;
+            profileCache.totalSkipped = (profileCache.totalSkipped || 0) + skipped;
             profileCache.lastAccuracy = accuracyPct;
             localStorage.setItem('exampulse_profile_data', JSON.stringify(profileCache));
             document.getElementById('profile-stat-exams').innerText = profileCache.totalExams;
             document.getElementById('profile-stat-score').innerText = profileCache.lastScore;
             document.getElementById('profile-stat-accuracy').innerText = accuracyPct + '%';
+
+            saveToLeaderboard(finalScoreMetric, total, accuracyPct, totalAnswered);
+            updateLeaderboardUI();
             renderReviewFeedDashboard();
+            renderAnalyticsCharts(correct, wrong, skipped);
             updateAllUILabels();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderAnalyticsCharts(correct, wrong, skipped) {
+            const pieCtx = document.getElementById('pieChart')?.getContext('2d');
+            const barCtx = document.getElementById('barChart')?.getContext('2d');
+            if (pieChartInstance) pieChartInstance.destroy();
+            if (barChartInstance) barChartInstance.destroy();
+
+            if (pieCtx) {
+                pieChartInstance = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
+                        datasets: [{
+                            data: [correct, wrong, skipped],
+                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                            borderColor: 'var(--border-main)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: 'var(--text-body)', font: { size: 11 } } } }
+                    }
+                });
+            }
+            if (barCtx) {
+                barChartInstance = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
+                        datasets: [{
+                            label: t('total_questions', { count: '' }),
+                            data: [correct, wrong, skipped],
+                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1, color: 'var(--text-muted)' }, grid: { color: 'var(--border-main)' } },
+                            x: { ticks: { color: 'var(--text-body)', font: { size: 10 } } } }
+                    }
+                });
+            }
         }
 
         function renderReviewFeedDashboard() {
@@ -1498,14 +2085,17 @@
                 }`;
                 let optsBlockHtml = '';
                 q.options.forEach((opt, oIdx) => {
-                    let badge = "bg-slate-500/10 custom-text-muted border-slate-200 dark:border-slate-800";
+                    let badge =
+                        "bg-slate-500/10 custom-text-muted border-slate-200 dark:border-slate-800";
                     let classes = "custom-border bg-slate-500/5 custom-text-body";
                     if (oIdx === q.correct) {
                         badge = "bg-emerald-600 text-white";
-                        classes = "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold";
+                        classes =
+                            "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold";
                     } else if (oIdx === ua && !isCorrect && ua !== -1) {
                         badge = "bg-rose-600 text-white";
-                        classes = "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-400 font-semibold";
+                        classes =
+                            "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-400 font-semibold";
                     }
                     const letter = getOptionLetter(oIdx);
                     optsBlockHtml += `
@@ -1518,10 +2108,13 @@
                 let statusBadge = isCorrect ?
                     `<span class="text-xs font-bold state-success px-2.5 py-1 rounded-md border border-emerald-500/30"><i class="fa-solid fa-check"></i> ${t('correct_badge')}</span>` :
                     isSkipped ?
-                    (isTimeout ? `<span class="text-xs font-bold state-info px-2.5 py-1 rounded-md border"><i class="fa-solid fa-clock"></i> ${t('timeout_badge')}</span>` : `<span class="text-xs font-bold custom-input px-2.5 py-1 rounded-md border"><i class="fa-solid fa-minus"></i> ${t('skipped_badge')}</span>`) :
+                    (isTimeout ?
+                        `<span class="text-xs font-bold state-info px-2.5 py-1 rounded-md border"><i class="fa-solid fa-clock"></i> ${t('timeout_badge')}</span>` :
+                        `<span class="text-xs font-bold custom-input px-2.5 py-1 rounded-md border"><i class="fa-solid fa-minus"></i> ${t('skipped_badge')}</span>`) :
                     `<span class="text-xs font-bold state-error px-2.5 py-1 rounded-md border border-rose-500/30"><i class="fa-solid fa-xmark"></i> ${t('wrong_badge')} (-${negativeMarkVal})</span>`;
                 let bookmarkBadge = bookmarks[idx] ?
-                    `<span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-md"><i class="fa-solid fa-bookmark"></i> ${t('was_bookmarked')}</span>` : '';
+                    `<span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-md"><i class="fa-solid fa-bookmark"></i> ${t('was_bookmarked')}</span>` :
+                    '';
                 card.innerHTML = `
                     <div class="flex items-center justify-between gap-4 mb-3">
                         <div class="flex items-center gap-2">
@@ -1545,7 +2138,9 @@
 
         function exportPerformanceReportToTextFile() {
             let total = activeQuestions.length;
-            let correct = 0, wrong = 0, skipped = 0;
+            let correct = 0,
+                wrong = 0,
+                skipped = 0;
             activeQuestions.forEach((q, idx) => {
                 const ans = userAnswers[idx];
                 if (ans === null || ans === -1) skipped++;
@@ -1555,33 +2150,50 @@
             let finalScore = correct - (wrong * negativeMarkVal);
             let totalAnswered = correct + wrong;
             let accuracyPct = totalAnswered > 0 ? Math.round((correct / totalAnswered) * 100) : 0;
+            let passed = (finalScore / total) * 100 >= passMarkPercent;
 
             let txt = `==================================================\n`;
             txt += `           EXAMPULSE PRO PERFORMANCE REPORT       \n`;
             txt += `==================================================\n`;
-            txt += `Date & Time : ${new Date().toLocaleString(currentLang === 'bn' ? 'bn-BD' : 'en-US')}\n`;
-            txt += `Practice Mode: ${examMode === 'poll' ? 'Poll Mode' : 'Standard Exam Mode'}\n`;
-            txt += `Question View Mode: ${viewMode === 'list' ? 'List View' : 'One-by-One View'}\n`;
-            txt += `--------------------------------------------------\n`;
+            txt +=
+                `Date & Time : ${new Date().toLocaleString(currentLang === 'bn' ? 'bn-BD' : 'en-US')}\n`;
+            txt +=
+                `Practice Mode: ${examMode === 'poll' ? 'Poll Mode' : 'Standard Exam Mode'}\n`;
+            txt +=
+                `Question View Mode: ${viewMode === 'list' ? 'List View' : 'One-by-One View'}\n`;
+            txt += `Shuffle Questions: ${shuffleQuestionsEnabled ? 'Yes' : 'No'}\n`;
+            txt += `Shuffle Options: ${shuffleOptionsEnabled ? 'Yes' : 'No'}\n`;
+            txt += `Pass Mark: ${passMarkPercent}%\n`;
+            txt +=
+                `--------------------------------------------------\n`;
             txt += `Total Questions  : ${total}\n`;
             txt += `Correct Answers  : ${correct}\n`;
             txt += `Wrong Answers    : ${wrong}\n`;
             txt += `Skipped (incl. Timeouts) : ${skipped}\n`;
             txt += `Accuracy         : ${accuracyPct}%\n`;
-            txt += `Negative Marking : -${(wrong * negativeMarkVal).toFixed(2)}\n`;
+            txt +=
+                `Negative Marking : -${(wrong * negativeMarkVal).toFixed(2)}\n`;
             txt += `Final Score      : ${finalScore.toFixed(2)} / ${total}\n`;
-            txt += `==================================================\n\n`;
-            txt += `               Question & Answer Review           \n`;
-            txt += `--------------------------------------------------\n`;
+            txt +=
+                `Status           : ${passed ? 'PASS' : 'FAIL'}\n`;
+            txt +=
+                `==================================================\n\n`;
+            txt +=
+                `               Question & Answer Review           \n`;
+            txt +=
+                `--------------------------------------------------\n`;
             activeQuestions.forEach((q, idx) => {
                 let ua = userAnswers[idx];
-                let userAnsStr = ua === -1 ? "Timed Out" : ua !== null ? q.options[ua] : "Skipped";
+                let userAnsStr = ua === -1 ? "Timed Out" : ua !== null ? q.options[ua] :
+                    "Skipped";
                 let correctAnsStr = q.options[q.correct];
                 txt += `${idx + 1}. Question: ${q.q}\n`;
                 txt += `   Your Answer   : ${userAnsStr}\n`;
                 txt += `   Correct Answer: ${correctAnsStr}\n`;
-                if (q.explanation) txt += `   Explanation   : ${q.explanation}\n`;
-                txt += `--------------------------------------------------\n`;
+                if (q.explanation) txt +=
+                    `   Explanation   : ${q.explanation}\n`;
+                txt +=
+                    `--------------------------------------------------\n`;
             });
             const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
             const url = URL.createObjectURL(blob);
@@ -1594,7 +2206,39 @@
             URL.revokeObjectURL(url);
         }
 
+        // ==================== SHARE & PRINT ====================
+        shareBtn.addEventListener('click', async () => {
+            const total = activeQuestions.length;
+            let correct = 0,
+                wrong = 0;
+            activeQuestions.forEach((q, idx) => {
+                const ans = userAnswers[idx];
+                if (ans !== null && ans !== -1) {
+                    if (ans === q.correct) correct++;
+                    else wrong++;
+                }
+            });
+            let finalScore = correct - (wrong * negativeMarkVal);
+            let totalAnswered = correct + wrong;
+            let accuracyPct = totalAnswered > 0 ? Math.round((correct / totalAnswered) * 100) : 0;
+            const shareData = {
+                title: t('share_title'),
+                text: t('share_text', { score: finalScore.toFixed(2), total, accuracy: accuracyPct }),
+            };
+            if (navigator.share) {
+                try { await navigator.share(shareData); } catch (err) { console.log('Share cancelled'); }
+            } else {
+                navigator.clipboard.writeText(shareData.text).then(() => alert('রেজাল্ট কপি করা হয়েছে!')).catch(() => alert(
+                    'শেয়ার করা সম্ভব হয়নি।'));
+            }
+        });
+
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
         function revertToHomeConsole() {
+            stopTTS();
             resultSection.classList.add('hidden');
             setupSection.classList.remove('hidden');
             inspectCachedProgressTokens();
@@ -1628,7 +2272,8 @@
         profileToggleBtn.addEventListener('click', () => profileModal.classList.remove('hidden'));
         closeProfileBtn.addEventListener('click', () => profileModal.classList.add('hidden'));
         saveProfileBtn.addEventListener('click', saveProfileDetailsEngine);
-        profileModal.addEventListener('click', (e) => { if (e.target === profileModal) profileModal.classList.add('hidden'); });
+        profileModal.addEventListener('click', (e) => { if (e.target === profileModal) profileModal.classList.add(
+                'hidden'); });
     </script>
     <script>
         if ('serviceWorker' in navigator) {
