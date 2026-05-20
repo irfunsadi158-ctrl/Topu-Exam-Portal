@@ -2,8 +2,7 @@
 <html lang="bn">
 <head>
     <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4f46e5">
-
+    <meta name="theme-color" content="#4f46e5">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল</title>
@@ -11,10 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Theme Engine: Perfectly handling Dark & Light Palette contrast keys */
         :root {
             --bg-main: #020617;
             --bg-card: rgba(15, 23, 42, 0.6);
@@ -23,19 +21,15 @@
             --text-title: #ffffff;
             --text-body: #cbd5e1;
             --text-muted: #64748b;
-            
             --bg-selected: rgba(79, 70, 229, 0.15);
             --border-selected: #6366f1;
             --text-selected: #a5b4fc;
-            
             --bg-success: rgba(16, 185, 129, 0.12);
             --border-success: #10b981;
             --text-success: #34d399;
-            
             --bg-error: rgba(239, 68, 68, 0.12);
             --border-error: #ef4444;
             --text-error: #f87171;
-            
             --bg-info: rgba(245, 158, 11, 0.12);
             --border-info: #f59e0b;
             --text-info: #fbbf24;
@@ -48,19 +42,15 @@
             --text-title: #0f172a;
             --text-body: #334155;
             --text-muted: #64748b;
-            
             --bg-selected: #e0e7ff;
             --border-selected: #4f46e5;
             --text-selected: #312e81;
-            
             --bg-success: #e6f4ea;
             --border-success: #1e8e3e;
             --text-success: #137333;
-            
             --bg-error: #fce8e6;
             --border-error: #d93025;
             --text-error: #c5221f;
-            
             --bg-info: #fef3c7;
             --border-info: #b45309;
             --text-info: #78350f;
@@ -72,6 +62,7 @@
             background-color: var(--bg-main);
             color: var(--text-body);
         }
+        .font-en { font-family: 'Inter', 'Hind Siliguri', sans-serif; }
         .custom-bg { background-color: var(--bg-main); }
         .custom-card { background-color: var(--bg-card); border-color: var(--border-main); }
         .custom-input { background-color: var(--bg-input); border-color: var(--border-main); color: var(--text-title); }
@@ -79,7 +70,6 @@
         .custom-text-body { color: var(--text-body); }
         .custom-text-muted { color: var(--text-muted); }
         .custom-border { border-color: var(--border-main); }
-        
         .state-selected { background-color: var(--bg-selected); border-color: var(--border-selected); color: var(--text-selected); }
         .state-success { background-color: var(--bg-success); border-color: var(--border-success); color: var(--text-success); }
         .state-error { background-color: var(--bg-error); border-color: var(--border-error); color: var(--text-error); }
@@ -88,23 +78,143 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-main); }
         ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; }
+
+        /* ============ ENTRANCE ANIMATION ============ */
+        #entrance-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #020617;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+        body.light-theme #entrance-overlay { background: #f1f5f9; }
+        #entrance-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .entrance-icon-wrapper {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .entrance-icon-inner {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            animation: entrancePulse 0.8s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(79, 70, 229, 0.5), 0 0 80px rgba(124, 58, 237, 0.3);
+        }
+        .entrance-icon-inner i { font-size: 30px; color: #fff; }
+        @keyframes entrancePulse {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.18); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+            60% { transform: scale(1); }
+        }
+        .entrance-ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(99, 102, 241, 0.5);
+            animation: rippleOut 1.8s ease-out infinite;
+        }
+        .entrance-ripple:nth-child(2) { animation-delay: 0.6s; }
+        .entrance-ripple:nth-child(3) { animation-delay: 1.2s; }
+        @keyframes rippleOut {
+            0% { width: 70px; height: 70px; opacity: 0.9; }
+            100% { width: 160px; height: 160px; opacity: 0; }
+        }
+        .entrance-title {
+            margin-top: 24px;
+            font-weight: 800;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #818cf8, #c084fc, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            animation: shimmerText 2s ease-in-out infinite;
+        }
+        @keyframes shimmerText {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.4); }
+        }
+        .entrance-subtitle {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .entrance-dots { display: flex; gap: 8px; margin-top: 20px; }
+        .entrance-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6366f1;
+            animation: dotBounce 0.9s ease-in-out infinite;
+        }
+        .entrance-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .entrance-dots span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes dotBounce {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-16px); opacity: 1; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between select-none">
 
+    <!-- ==================== ENTRANCE ANIMATION OVERLAY ==================== -->
+    <div id="entrance-overlay">
+        <div class="entrance-icon-wrapper">
+            <div class="entrance-ripple"></div>
+            <div class="entrance-ripple"></div>
+            <div class="entrance-ripple"></div>
+            <div class="entrance-icon-inner">
+                <i class="fa-solid fa-user-md"></i>
+            </div>
+        </div>
+        <div class="entrance-title">ExamPulse Pro</div>
+        <div class="entrance-subtitle">Smart Exam System</div>
+        <div class="entrance-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+
     <header class="border-b bg-slate-900/10 custom-border backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center flex-wrap gap-2">
             <div class="flex items-center gap-3">
                 <div class="bg-gradient-to-tr from-indigo-600 to-violet-600 p-2 rounded-xl shadow-md">
                     <i class="fa-solid fa-user-md text-lg text-white"></i>
                 </div>
                 <div>
                     <h1 class="text-lg font-bold tracking-wide bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">ExamPulse Pro</h1>
-                    <p class="text-[11px] custom-text-muted font-medium">স্মার্ট এক্সাম সিস্টেম</p>
+                    <p class="text-[11px] custom-text-muted font-medium" data-i18n="header_subtitle">স্মার্ট এক্সাম সিস্টেম</p>
                 </div>
             </div>
-            
-            <div class="flex items-center gap-3">
+
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <button id="lang-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-xs font-black custom-card hover:bg-slate-500/10 transition tracking-tighter" title="ভাষা পরিবর্তন / Switch Language">
+                    <span id="lang-indicator">BN</span>
+                </button>
                 <button id="profile-toggle-btn" class="w-9 h-9 rounded-xl border flex items-center justify-center text-indigo-500 custom-card hover:bg-slate-500/10 transition" title="ইউজার প্রোফাইল">
                     <i class="fa-solid fa-user text-sm"></i>
                 </button>
@@ -112,7 +222,7 @@
                     <i id="theme-icon" class="fa-solid fa-moon"></i>
                 </button>
                 <div id="active-negative-badge" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl state-error border">
-                    <i class="fa-solid fa-triangle-exclamation"></i> নেগেটিভ মার্কিং
+                    <i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="negative_marking_badge">নেগেটিভ মার্কিং</span>
                 </div>
                 <div id="live-timer-container" class="hidden custom-input border px-3 py-1.5 rounded-xl flex items-center gap-2">
                     <i id="timer-status-icon" class="fa-regular fa-clock text-amber-500 animate-pulse"></i>
@@ -123,7 +233,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-4 w-full flex-grow flex flex-col items-center justify-start">
-        
+
         <div id="quote-widget-banner" class="w-full max-w-5xl p-3 mb-4 rounded-xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/5 to-violet-500/5 backdrop-blur-md flex items-center justify-between gap-4 shadow-sm">
             <div class="flex items-center gap-3">
                 <div class="text-indigo-500 text-base flex-shrink-0 animate-pulse">
@@ -141,29 +251,29 @@
             <div id="resume-banner" class="hidden p-3 rounded-xl state-selected border flex items-center justify-between gap-3 text-xs">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-clock-rotate-left text-base text-indigo-500"></i>
-                    <span class="font-medium">তোমার ব্রাউজারে একটি অসমাপ্ত সেশন পাওয়া গেছে। তুমি কি রিকভার করতে চাও?</span>
+                    <span class="font-medium" data-i18n="resume_banner_text">তোমার ব্রাউজারে একটি অসমাপ্ত সেশন পাওয়া গেছে। তুমি কি রিকভার করতে চাও?</span>
                 </div>
                 <button id="resume-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
-                    <i class="fa-solid fa-rotate-right text-[10px]"></i> রিকভার
+                    <i class="fa-solid fa-rotate-right text-[10px]"></i> <span data-i18n="recover_btn">রিকভার</span>
                 </button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-slate-500/5 p-3.5 rounded-xl border custom-border">
                 <div class="md:col-span-4 space-y-1">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider custom-text-muted"><i class="fa-solid fa-bookmark text-indigo-500"></i> সংরক্ষিত লাইব্রেরি</label>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider custom-text-muted"><i class="fa-solid fa-bookmark text-indigo-500"></i> <span data-i18n="saved_library_label">সংরক্ষিত লাইব্রেরি</span></label>
                     <select id="library-select" class="w-full custom-input border rounded-xl p-2 text-xs font-medium focus:outline-none focus:border-indigo-500"></select>
                 </div>
                 <div class="md:col-span-5 space-y-1">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider custom-text-muted"><i class="fa-solid fa-cloud-arrow-up text-indigo-500"></i> লাইব্রেরিতে সেভ করুন</label>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider custom-text-muted"><i class="fa-solid fa-cloud-arrow-up text-indigo-500"></i> <span data-i18n="save_to_library_label">লাইব্রেরিতে সেভ করুন</span></label>
                     <div class="flex gap-2">
-                        <input type="text" id="library-name-input" placeholder="ব্যাংকের নাম দাও" class="flex-grow custom-input border rounded-xl p-2 text-xs font-medium focus:outline-none focus:border-indigo-500">
-                        <button id="library-save-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> সেভ</button>
+                        <input type="text" id="library-name-input" data-i18n-placeholder="bank_name_placeholder" placeholder="ব্যাংকের নাম দাও" class="flex-grow custom-input border rounded-xl p-2 text-xs font-medium focus:outline-none focus:border-indigo-500">
+                        <button id="library-save-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> <span data-i18n="save_btn">সেভ</span></button>
                     </div>
                 </div>
                 <div class="md:col-span-3 space-y-1">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider custom-text-muted"><i class="fa-solid fa-file-import text-indigo-500"></i> ডিরেক্ট ফাইল আপলোড</label>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider custom-text-muted"><i class="fa-solid fa-file-import text-indigo-500"></i> <span data-i18n="file_upload_label">ডিরেক্ট ফাইল আপলোড</span></label>
                     <label for="file-upload-input" class="w-full px-3 py-2 rounded-xl border border-dashed custom-border bg-slate-500/5 hover:bg-slate-500/10 transition cursor-pointer text-xs font-bold text-center flex items-center justify-center gap-1.5 text-indigo-500">
-                        <i class="fa-solid fa-file-code"></i> <span id="file-upload-label" class="truncate max-w-[160px]">.json ফাইল আপলোড</span>
+                        <i class="fa-solid fa-file-code"></i> <span id="file-upload-label" class="truncate max-w-[160px]" data-i18n="json_upload_label">.json ফাইল আপলোড</span>
                     </label>
                     <input type="file" id="file-upload-input" accept=".json" class="hidden">
                 </div>
@@ -171,47 +281,47 @@
 
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 pt-1">
                 <div>
-                    <label class="block text-xs font-semibold mb-1 custom-text-title">শুরুর প্রশ্ন:</label>
+                    <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="range_start_label">শুরুর প্রশ্ন:</label>
                     <input type="number" id="range-start" value="১" min="1" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1 custom-text-title">শেষের প্রশ্ন:</label>
+                    <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="range_end_label">শেষের প্রশ্ন:</label>
                     <input type="number" id="range-end" value="২০" min="1" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs">
                 </div>
                 <div>
-                    <label id="duration-label" class="block text-xs font-semibold mb-1 custom-text-title">সময় (মিনিট):</label>
+                    <label id="duration-label" class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="time_label">সময় (মিনিট):</label>
                     <input type="number" id="exam-duration" value="১০" min="1" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs text-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1 custom-text-title">এক্সাম মোড:</label>
+                    <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="exam_mode_label">এক্সাম মোড:</label>
                     <select id="exam-mode-select" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs focus:outline-none">
-                        <option value="exam" selected>Exam Mode</option>
-                        <option value="poll">Poll Mode</option>
+                        <option value="exam" selected data-i18n="exam_mode_exam">Exam Mode</option>
+                        <option value="poll" data-i18n="exam_mode_poll">Poll Mode</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1 custom-text-title">প্রদর্শন মোড:</label>
+                    <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="view_mode_label">প্রদর্শন মোড:</label>
                     <select id="view-mode-select" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs focus:outline-none">
-                        <option value="single" selected>One-by-One</option>
-                        <option value="list">List View</option>
+                        <option value="single" selected data-i18n="view_mode_single">One-by-One</option>
+                        <option value="list" data-i18n="view_mode_list">List View</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold mb-1 custom-text-title">নেগেটিভ মার্ক:</label>
+                    <label class="block text-xs font-semibold mb-1 custom-text-title" data-i18n="negative_mark_label">নেগেটিভ মার্ক:</label>
                     <select id="negative-marking-select" class="w-full custom-input border rounded-xl p-2.5 text-center font-bold text-xs focus:outline-none">
-                        <option value="0">বন্ধ (0.00)</option>
-                        <option value="0.25" selected>মেডিকেল (০.২৫)</option>
-                        <option value="0.50">ইঞ্জিনিয়ারিং (০.৫০)</option>
+                        <option value="0" data-i18n="neg_off">বন্ধ (0.00)</option>
+                        <option value="0.25" selected data-i18n="neg_medical">মেডিকেল (০.২৫)</option>
+                        <option value="0.50" data-i18n="neg_engineering">ইঞ্জিনিয়ারিং (০.৫০)</option>
                     </select>
                 </div>
             </div>
 
             <div class="pt-1">
-                <textarea id="json-input" class="w-full h-24 custom-input border rounded-xl p-3 font-mono text-xs focus:outline-none focus:border-indigo-500 transition" placeholder="জেসন ফাইল আপলোড করলে কোড এখানে স্বয়ংক্রিয়ভাবে বসে যাবে অথবা কোড পেস্ট করো..."></textarea>
+                <textarea id="json-input" class="w-full h-24 custom-input border rounded-xl p-3 font-mono text-xs focus:outline-none focus:border-indigo-500 transition" data-i18n-placeholder="json_placeholder" placeholder="জেসন ফাইল আপলোড করলে কোড এখানে স্বয়ংক্রিয়ভাবে বসে যাবে অথবা কোড পেস্ট করো..."></textarea>
             </div>
 
             <button id="start-btn" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3 rounded-xl shadow-md transition text-base flex items-center justify-center gap-2">
-                <i class="fa-solid fa-circle-play text-lg"></i> পরীক্ষা শুরু করুন
+                <i class="fa-solid fa-circle-play text-lg"></i> <span data-i18n="start_exam_btn">পরীক্ষা শুরু করুন</span>
             </button>
         </div>
 
@@ -227,7 +337,7 @@
                         <div class="flex justify-between items-center mb-2">
                             <span id="question-counter" class="bg-indigo-500/10 text-indigo-500 text-xs font-bold px-3 py-1.5 rounded-lg border border-indigo-500/20">প্রশ্ন নম্বর: ০/০</span>
                             <button id="bookmark-toggle-btn" class="text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-500/20 text-amber-500 hover:bg-amber-500/10 transition flex items-center gap-1.5">
-                                <i id="bookmark-icon" class="fa-regular fa-bookmark"></i> <span id="bookmark-text">বুকমার্ক করুন</span>
+                                <i id="bookmark-icon" class="fa-regular fa-bookmark"></i> <span id="bookmark-text" data-i18n="bookmark_btn">বুকমার্ক করুন</span>
                             </button>
                         </div>
                         <h3 id="question-text" class="text-lg md:text-xl font-bold custom-text-title mb-5 leading-relaxed">প্রশ্ন লোড হচ্ছে...</h3>
@@ -240,26 +350,25 @@
 
                 <div id="single-nav-controls" class="flex justify-between items-center mt-6 pt-4 border-t custom-border">
                     <button id="prev-btn" class="px-5 py-2.5 custom-input border text-slate-400 font-semibold rounded-xl flex items-center gap-2 transition disabled:opacity-20 disabled:pointer-events-none">
-                        <i class="fa-solid fa-arrow-left text-sm"></i> পূর্ববর্তী
+                        <i class="fa-solid fa-arrow-left text-sm"></i> <span data-i18n="prev_btn">পূর্ববর্তী</span>
                     </button>
-                    <button id="skip-btn" class="px-5 py-2.5 custom-bg hover:bg-slate-500/10 custom-text-muted font-semibold rounded-xl border custom-border transition">
+                    <button id="skip-btn" class="px-5 py-2.5 custom-bg hover:bg-slate-500/10 custom-text-muted font-semibold rounded-xl border custom-border transition" data-i18n="skip_btn">
                         স্কিপ
                     </button>
                     <button id="next-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl flex items-center gap-2 transition shadow-md">
-                        পরবর্তী <i class="fa-solid fa-arrow-right text-sm"></i>
+                        <span data-i18n="next_btn">পরবর্তী</span> <i class="fa-solid fa-arrow-right text-sm"></i>
                     </button>
                 </div>
             </div>
 
             <div class="w-full lg:w-72 custom-card bg-slate-500/5 border rounded-2xl p-4 flex flex-col justify-between shadow-xl">
                 <div>
-                    <h4 class="font-bold text-xs custom-text-muted mb-4 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-grip-vertical text-indigo-400"></i> OMR রেসপন্স গ্রিড</h4>
+                    <h4 class="font-bold text-xs custom-text-muted mb-4 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-grip-vertical text-indigo-400"></i> <span data-i18n="omr_grid_title">OMR রেসপন্স গ্রিড</span></h4>
                     <div id="nav-grid" class="grid grid-cols-5 gap-2 max-h-[320px] lg:max-h-[420px] overflow-y-auto pr-1"></div>
                 </div>
-                
                 <div class="mt-6 pt-4 border-t custom-border">
                     <button id="submit-exam-btn" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl transition shadow-md flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-check-double"></i> পরীক্ষা শেষ করুন
+                        <i class="fa-solid fa-check-double"></i> <span data-i18n="submit_exam_btn">পরীক্ষা শেষ করুন</span>
                     </button>
                 </div>
             </div>
@@ -269,13 +378,14 @@
             
             <div class="border custom-card rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="text-center md:text-left space-y-2">
-                    <h2 class="text-2xl font-black custom-text-title">পরীক্ষার পারফরম্যান্স রিপোর্ট কার্ড</h2>
-                    <p class="text-slate-400 text-sm custom-text-body">নেগেটিভ মার্কিং ডিডাক্ট করে চূড়ান্ত মেরিট স্কোর হিসাব করা হয়েছে।</p>
+                    <h2 class="text-2xl font-black custom-text-title" data-i18n="result_title">পরীক্ষার পারফরম্যান্স রিপোর্ট কার্ড</h2>
+                    <p class="text-slate-400 text-sm custom-text-body" data-i18n="result_subtitle">নেগেটিভ মার্কিং ডিডাক্ট করে চূড়ান্ত মেরিট স্কোর হিসাব করা হয়েছে।</p>
                     
                     <div class="flex flex-wrap gap-2.5 pt-2 text-xs font-bold justify-center md:justify-start">
                         <span id="stat-total" class="px-3 py-2 custom-input border rounded-xl">মোট প্রশ্ন: ০</span>
                         <span id="stat-correct" class="px-3 py-2 state-success border rounded-xl">সঠিক: ০</span>
                         <span id="stat-wrong" class="px-3 py-2 state-error border rounded-xl">ভুল: ০</span>
+                        <span id="stat-accuracy" class="px-3 py-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-500 rounded-xl">নির্ভুলতা: ০%</span>
                         <span id="stat-deducted" class="px-3 py-2 state-info border rounded-xl">কাটা নম্বর: ০.০০</span>
                         <span id="stat-skipped" class="px-3 py-2 custom-bg border rounded-xl custom-text-muted">স্কিপ: ০</span>
                     </div>
@@ -288,20 +398,20 @@
                     </svg>
                     <div class="absolute text-center">
                         <span id="result-percent" class="text-2xl font-black block custom-text-title">০.০০</span>
-                        <span class="text-[10px] custom-text-muted font-bold uppercase tracking-wider">প্রাপ্ত স্কোর</span>
+                        <span class="text-[10px] custom-text-muted font-bold uppercase tracking-wider" data-i18n="score_obtained">প্রাপ্ত স্কোর</span>
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
-                <h3 class="text-lg font-bold custom-text-title flex items-center gap-2"><i class="fa-solid fa-rectangle-list text-cyan-400"></i> প্রশ্নপত্র ও উত্তর পর্যালোচনা</h3>
+                <h3 class="text-lg font-bold custom-text-title flex items-center gap-2"><i class="fa-solid fa-rectangle-list text-cyan-400"></i> <span data-i18n="review_title">প্রশ্নপত্র ও উত্তর পর্যালোচনা</span></h3>
                 
                 <div class="flex items-center gap-3">
                     <button id="save-file-btn" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition shadow-md">
-                        <i class="fa-solid fa-file-arrow-down"></i> রিপোর্ট ফাইল সেভ করুন
+                        <i class="fa-solid fa-file-arrow-down"></i> <span data-i18n="save_report_btn">রিপোর্ট ফাইল সেভ করুন</span>
                     </button>
                     <button id="restart-btn" class="px-4 py-2.5 custom-input border font-bold text-sm rounded-xl transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-house"></i> হোম পেজ
+                        <i class="fa-solid fa-house"></i> <span data-i18n="home_btn">হোম পেজ</span>
                     </button>
                 </div>
             </div>
@@ -321,36 +431,40 @@
                 <div class="w-20 h-20 bg-gradient-to-tr from-indigo-600 to-violet-600 rounded-full flex items-center justify-center mx-auto shadow-md">
                     <i class="fa-solid fa-user-md text-3xl text-white"></i>
                 </div>
-                <h3 class="text-xl font-bold custom-text-title">ইউজার প্রোফাইল</h3>
-                <p class="text-xs custom-text-muted">ExamPulse Pro ড্যাশবোর্ড</p>
+                <h3 class="text-xl font-bold custom-text-title" data-i18n="profile_title">ইউজার প্রোফাইল</h3>
+                <p class="text-xs custom-text-muted" data-i18n="profile_subtitle">ExamPulse Pro ড্যাশবোর্ড</p>
             </div>
             <hr class="custom-border">
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold custom-text-muted mb-1">শিক্ষার্থীর নাম:</label>
+                    <label class="block font-bold custom-text-muted mb-1" data-i18n="profile_name_label">শিক্ষার্থীর নাম:</label>
                     <input type="text" id="profile-name" class="w-full custom-input border rounded-xl p-2.5 font-medium focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block font-bold custom-text-muted mb-1">প্রতিষ্ঠান:</label>
+                    <label class="block font-bold custom-text-muted mb-1" data-i18n="profile_institute_label">প্রতিষ্ঠান:</label>
                     <input type="text" id="profile-institute" class="w-full custom-input border rounded-xl p-2.5 font-medium focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block font-bold custom-text-muted mb-1">ইমেইল ঠিকানা:</label>
+                    <label class="block font-bold custom-text-muted mb-1" data-i18n="profile_email_label">ইমেইল ঠিকানা:</label>
                     <input type="email" id="profile-email" class="w-full custom-input border rounded-xl p-2.5 font-medium focus:outline-none focus:border-indigo-500">
                 </div>
             </div>
-            <div class="bg-slate-500/5 p-3 rounded-xl border custom-border grid grid-cols-2 gap-2 text-center text-xs font-bold">
+            <div class="bg-slate-500/5 p-3 rounded-xl border custom-border grid grid-cols-3 gap-2 text-center text-xs font-bold">
                 <div class="p-2 custom-input border rounded-lg">
-                    <span class="block custom-text-muted mb-0.5 text-[10px]">মোট পরীক্ষা</span>
+                    <span class="block custom-text-muted mb-0.5 text-[10px]" data-i18n="profile_stat_exams">মোট পরীক্ষা</span>
                     <span id="profile-stat-exams" class="text-indigo-500 text-base">০</span>
                 </div>
                 <div class="p-2 custom-input border rounded-lg">
-                    <span class="block custom-text-muted mb-0.5 text-[10px]">সর্বশেষ স্কোর</span>
+                    <span class="block custom-text-muted mb-0.5 text-[10px]" data-i18n="profile_stat_score">সর্বশেষ স্কোর</span>
                     <span id="profile-stat-score" class="text-emerald-500 text-base">০.০০</span>
+                </div>
+                <div class="p-2 custom-input border rounded-lg">
+                    <span class="block custom-text-muted mb-0.5 text-[10px]" data-i18n="profile_stat_accuracy">নির্ভুলতা</span>
+                    <span id="profile-stat-accuracy" class="text-cyan-500 text-base">০%</span>
                 </div>
             </div>
             <button id="save-profile-btn" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-2.5 rounded-xl shadow-md transition text-sm flex items-center justify-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i> তথ্য সংরক্ষণ করুন
+                <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="profile_save_btn">তথ্য সংরক্ষণ করুন</span>
             </button>
         </div>
     </div>
@@ -360,22 +474,177 @@
     </footer>
 
     <script>
-        let masterQuestions = [];
-        let activeQuestions = [];
-        let currentIndex = 0;
-        let userAnswers = [];
-        let bookmarks = [];
-        let negativeMarkVal = 0.25;
-        let examMode = "exam"; 
-        let viewMode = "single"; 
-        
-        let examTimer = null;
-        let totalSeconds = 0;
-        let secondsRemaining = 0;
-        let isTimerPaused = false; 
-        let stopwatchElapsed = 0; 
+        // ==================== TRANSLATION ENGINE ====================
+        const translations = {
+            bn: {
+                header_subtitle: 'স্মার্ট এক্সাম সিস্টেম',
+                negative_marking_badge: 'নেগেটিভ মার্কিং',
+                resume_banner_text: 'তোমার ব্রাউজারে একটি অসমাপ্ত সেশন পাওয়া গেছে। তুমি কি রিকভার করতে চাও?',
+                recover_btn: 'রিকভার',
+                saved_library_label: 'সংরক্ষিত লাইব্রেরি',
+                save_to_library_label: 'লাইব্রেরিতে সেভ করুন',
+                bank_name_placeholder: 'ব্যাংকের নাম দাও',
+                save_btn: 'সেভ',
+                file_upload_label: 'ডিরেক্ট ফাইল আপলোড',
+                json_upload_label: '.json ফাইল আপলোড',
+                json_placeholder: 'জেসন ফাইল আপলোড করলে কোড এখানে স্বয়ংক্রিয়ভাবে বসে যাবে অথবা কোড পেস্ট করো...',
+                range_start_label: 'শুরুর প্রশ্ন:',
+                range_end_label: 'শেষের প্রশ্ন:',
+                time_label: 'সময় (মিনিট):',
+                time_label_poll: 'প্রতি প্রশ্নের সময় (সেকেন্ড):',
+                exam_mode_label: 'এক্সাম মোড:',
+                exam_mode_exam: 'Exam Mode',
+                exam_mode_poll: 'Poll Mode',
+                view_mode_label: 'প্রদর্শন মোড:',
+                view_mode_single: 'One-by-One',
+                view_mode_list: 'List View',
+                negative_mark_label: 'নেগেটিভ মার্ক:',
+                neg_off: 'বন্ধ (0.00)',
+                neg_medical: 'মেডিকেল (০.২৫)',
+                neg_engineering: 'ইঞ্জিনিয়ারিং (০.৫০)',
+                start_exam_btn: 'পরীক্ষা শুরু করুন',
+                question_counter: 'প্রশ্ন নম্বর: {current}/{total}',
+                bookmark_btn: 'বুকমার্ক করুন',
+                bookmarked: 'বুকমার্কড',
+                prev_btn: 'পূর্ববর্তী',
+                skip_btn: 'স্কিপ',
+                next_btn: 'পরবর্তী',
+                submit_exam_btn: 'পরীক্ষা শেষ করুন',
+                omr_grid_title: 'OMR রেসপন্স গ্রিড',
+                correct_answer: 'সঠিক উত্তর!',
+                wrong_answer: 'ভুল উত্তর!',
+                wrong_answer_correct_is: 'ভুল উত্তর! সঠিক উত্তর হলো: {correct}',
+                timeout_correct_is: 'সময় শেষ! সঠিক উত্তর হলো: {correct}',
+                medical_explanation: 'মেডিকেল ব্যাখ্যা:',
+                result_title: 'পরীক্ষার পারফরম্যান্স রিপোর্ট কার্ড',
+                result_subtitle: 'নেগেটিভ মার্কিং ডিডাক্ট করে চূড়ান্ত মেরিট স্কোর হিসাব করা হয়েছে।',
+                score_obtained: 'প্রাপ্ত স্কোর',
+                review_title: 'প্রশ্নপত্র ও উত্তর পর্যালোচনা',
+                save_report_btn: 'রিপোর্ট ফাইল সেভ করুন',
+                home_btn: 'হোম পেজ',
+                total_questions: 'মোট প্রশ্ন: {count}',
+                correct_label: 'সঠিক: {count}',
+                wrong_label: 'ভুল: {count}',
+                accuracy_label: 'নির্ভুলতা: {pct}%',
+                deducted_label: 'কাটা নম্বর: -{val}',
+                skipped_label: 'স্কিপ: {count}',
+                correct_badge: 'সঠিক',
+                wrong_badge: 'ভুল',
+                skipped_badge: 'স্কিপড',
+                timeout_badge: 'টাইম আউট',
+                was_bookmarked: 'বুকমার্কড ছিল',
+                question_number_review: 'প্রশ্ন নম্বর: {num}',
+                profile_title: 'ইউজার প্রোফাইল',
+                profile_subtitle: 'ExamPulse Pro ড্যাশবোর্ড',
+                profile_name_label: 'শিক্ষার্থীর নাম:',
+                profile_institute_label: 'প্রতিষ্ঠান:',
+                profile_email_label: 'ইমেইল ঠিকানা:',
+                profile_stat_exams: 'মোট পরীক্ষা',
+                profile_stat_score: 'সর্বশেষ স্কোর',
+                profile_stat_accuracy: 'নির্ভুলতা',
+                profile_save_btn: 'তথ্য সংরক্ষণ করুন',
+                profile_saved_alert: 'প্রোফাইল তথ্য সফলভাবে সেভ করা হয়েছে!',
+                json_invalid_alert: 'ফাইলের ভেতরের জেসন কোড ফরম্যাটটি সঠিক নয়!',
+                bank_name_required_alert: 'অনুগ্রহ করে কোশ্চেন ব্যাংকের একটি নাম দাও!',
+                json_empty_alert: 'কোড বক্সে কোনো জেসন ডাটা উপস্থিত নেই!',
+                json_save_failed_alert: 'জেসন ডাটা সঠিক নয়, সেভ করা ব্যর্থ হয়েছে।',
+                library_saved_alert: '"{name}" লাইব্রেরিতে সেভ করা হয়েছে!',
+                json_required_alert: 'অনুগ্রহ করে আগে বক্সে জেসন কোড পেস্ট করো অথবা ফাইল আপলোড করো!',
+                json_parse_error_alert: 'ভুল JSON ফরম্যাট! ব্র্যাকেট বা কমা ঠিক আছে কিনা চেক করো।',
+                range_empty_alert: 'এই রেঞ্জের ভেতর কোনো প্রশ্ন পাওয়া যায়নি!',
+                time_up_alert: 'সময় শেষ! তোমার পরীক্ষাটি অটো-সাবমিট করা হচ্ছে।',
+                submit_confirm: 'তুমি কি নিশ্চিতভাবে পরীক্ষা শেষ করে ওএমআর জমা দিতে চাও?',
+                upload_success: 'আপলোড সফল',
+                loading_question: 'প্রশ্ন লোড হচ্ছে...',
+                library_default_option: '-- লাইব্রেরি থেকে সিলেক্ট করুন --',
+                file_upload_success_html: '<i class="fa-solid fa-circle-check text-emerald-500"></i> আপলোড সফল',
+            },
+            en: {
+                header_subtitle: 'Smart Exam System',
+                negative_marking_badge: 'Negative Marking',
+                resume_banner_text: 'An unfinished session was found in your browser. Do you want to recover it?',
+                recover_btn: 'Recover',
+                saved_library_label: 'Saved Library',
+                save_to_library_label: 'Save to Library',
+                bank_name_placeholder: 'Name your bank',
+                save_btn: 'Save',
+                file_upload_label: 'Direct File Upload',
+                json_upload_label: 'Upload .json File',
+                json_placeholder: 'JSON code will auto-populate here when you upload a file, or paste code directly...',
+                range_start_label: 'Start Question:',
+                range_end_label: 'End Question:',
+                time_label: 'Time (minutes):',
+                time_label_poll: 'Time per Question (seconds):',
+                exam_mode_label: 'Exam Mode:',
+                exam_mode_exam: 'Exam Mode',
+                exam_mode_poll: 'Poll Mode',
+                view_mode_label: 'View Mode:',
+                view_mode_single: 'One-by-One',
+                view_mode_list: 'List View',
+                negative_mark_label: 'Negative Mark:',
+                neg_off: 'Off (0.00)',
+                neg_medical: 'Medical (0.25)',
+                neg_engineering: 'Engineering (0.50)',
+                start_exam_btn: 'Start Exam',
+                question_counter: 'Question: {current}/{total}',
+                bookmark_btn: 'Bookmark',
+                bookmarked: 'Bookmarked',
+                prev_btn: 'Previous',
+                skip_btn: 'Skip',
+                next_btn: 'Next',
+                submit_exam_btn: 'Submit Exam',
+                omr_grid_title: 'OMR Response Grid',
+                correct_answer: 'Correct Answer!',
+                wrong_answer: 'Wrong Answer!',
+                wrong_answer_correct_is: 'Wrong! Correct answer: {correct}',
+                timeout_correct_is: 'Time up! Correct answer: {correct}',
+                medical_explanation: 'Medical Explanation:',
+                result_title: 'Exam Performance Report Card',
+                result_subtitle: 'Final merit score calculated after negative marking deduction.',
+                score_obtained: 'Score Obtained',
+                review_title: 'Question & Answer Review',
+                save_report_btn: 'Save Report File',
+                home_btn: 'Home Page',
+                total_questions: 'Total Questions: {count}',
+                correct_label: 'Correct: {count}',
+                wrong_label: 'Wrong: {count}',
+                accuracy_label: 'Accuracy: {pct}%',
+                deducted_label: 'Deducted: -{val}',
+                skipped_label: 'Skipped: {count}',
+                correct_badge: 'Correct',
+                wrong_badge: 'Wrong',
+                skipped_badge: 'Skipped',
+                timeout_badge: 'Timed Out',
+                was_bookmarked: 'Was Bookmarked',
+                question_number_review: 'Question No: {num}',
+                profile_title: 'User Profile',
+                profile_subtitle: 'ExamPulse Pro Dashboard',
+                profile_name_label: 'Student Name:',
+                profile_institute_label: 'Institution:',
+                profile_email_label: 'Email Address:',
+                profile_stat_exams: 'Total Exams',
+                profile_stat_score: 'Last Score',
+                profile_stat_accuracy: 'Accuracy',
+                profile_save_btn: 'Save Information',
+                profile_saved_alert: 'Profile information saved successfully!',
+                json_invalid_alert: 'The JSON format inside the file is incorrect!',
+                bank_name_required_alert: 'Please give a name to the question bank!',
+                json_empty_alert: 'No JSON data present in the code box!',
+                json_save_failed_alert: 'JSON data is invalid, save failed.',
+                library_saved_alert: '"{name}" has been saved to the library!',
+                json_required_alert: 'Please paste JSON code in the box or upload a file first!',
+                json_parse_error_alert: 'Invalid JSON format! Please check brackets and commas.',
+                range_empty_alert: 'No questions found within this range!',
+                time_up_alert: 'Time is up! Your exam is being auto-submitted.',
+                submit_confirm: 'Are you sure you want to finish the exam and submit the OMR?',
+                upload_success: 'Upload Successful',
+                loading_question: 'Loading question...',
+                library_default_option: '-- Select from Library --',
+                file_upload_success_html: '<i class="fa-solid fa-circle-check text-emerald-500"></i> Upload Successful',
+            }
+        };
 
-        const motivationalQuotes = [
+        const motivationalQuotesBn = [
             "আজকের রাত জেগে করা পরিশ্রমই তোমার আগামীকালের সাদা অ্যাপ্রন আর স্টেথোস্কোপের শব্দ হয়ে ফিরে আসবে। 🩺",
             "সাফল্যের কোনো শর্টকাট নেই; তোমার প্রতিদিনের ছোট ছোট ত্যাগ ও নিষ্ঠাই তোমাকে DMC-র বারান্দায় নিয়ে যাবে। 🚀",
             "মেডিকেল ভর্তি পরীক্ষা শুধু মেধার নয়, এটি তোমার শেষ মুহূর্ত পর্যন্ত টিকে থাকার ধৈর্য ও একাগ্রতার পরীক্ষা। 🧬",
@@ -383,19 +652,65 @@
             "যখনই পড়তে ভালো লাগবে না, চোখ বন্ধ করে একবার ভাবো—তোমার নামের আগে 'ডাঃ' লেখা দেখতে কতটা দারুণ লাগবে! ❤️",
             "কষ্ট যা করার এখনই করো, পরীক্ষার পর যখন মেরিট লিস্টে নিজের নাম দেখবে, সব কষ্ট এক নিমিষেই ভুলে যাবে! 🎯"
         ];
+        const motivationalQuotesEn = [
+            "The sleepless nights you spend studying today will return to you as the sound of your stethoscope and white apron tomorrow. 🩺",
+            "There's no shortcut to success; your daily small sacrifices and dedication will take you to the corridors of your dream medical college. 🚀",
+            "The medical admission test isn't just about merit—it's a test of your patience and focus until the very last moment. 🧬",
+            "Hard work never goes in vain. Believe in yourself—you too can conquer the stethoscope. 💪",
+            "Whenever you feel like giving up, close your eyes and imagine how amazing it will feel to see 'Dr.' before your name! ❤️",
+            "Do the hard work now; when you see your name on the merit list after the exam, all the pain will vanish in an instant! 🎯"
+        ];
 
+        let currentLang = 'bn';
+
+        function t(key, replacements = {}) {
+            let str = (translations[currentLang] && translations[currentLang][key]) ?
+                translations[currentLang][key] :
+                (translations['bn'][key] || key);
+            for (const [k, v] of Object.entries(replacements)) {
+                str = str.replace(`{${k}}`, v);
+            }
+            return str;
+        }
+
+        function getMotivationalQuote() {
+            const arr = currentLang === 'en' ? motivationalQuotesEn : motivationalQuotesBn;
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function getOptionLetter(idx) {
+            return currentLang === 'en' ?
+                String.fromCharCode(65 + idx) :
+                String.fromCharCode(0x0995 + idx);
+        }
+
+        // ==================== GLOBAL STATE ====================
+        let masterQuestions = [];
+        let activeQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = [];
+        let bookmarks = [];
+        let negativeMarkVal = 0.25;
+        let examMode = "exam";
+        let viewMode = "single";
+
+        let examTimer = null;
+        let totalSeconds = 0;
+        let secondsRemaining = 0;
+        let isTimerPaused = false;
+        let stopwatchElapsed = 0;
+
+        // ==================== DOM REFS ====================
         const setupSection = document.getElementById('setup-section');
         const examSection = document.getElementById('exam-section');
         const resultSection = document.getElementById('result-section');
         const resumeBanner = document.getElementById('resume-banner');
-        
         const jsonInput = document.getElementById('json-input');
         const fileUploadInput = document.getElementById('file-upload-input');
         const fileUploadLabel = document.getElementById('file-upload-label');
         const librarySelect = document.getElementById('library-select');
         const libraryNameInput = document.getElementById('library-name-input');
         const librarySaveBtn = document.getElementById('library-save-btn');
-
         const rangeStart = document.getElementById('range-start');
         const rangeEnd = document.getElementById('range-end');
         const durationLabel = document.getElementById('duration-label');
@@ -408,7 +723,6 @@
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const themeIcon = document.getElementById('theme-icon');
         const timerStatusIcon = document.getElementById('timer-status-icon');
-        
         const quoteTextNode = document.getElementById('motivational-quote-text');
         const refreshQuoteBtn = document.getElementById('refresh-quote-btn');
         const activeNegativeBadge = document.getElementById('active-negative-badge');
@@ -425,7 +739,6 @@
         const listViewContainer = document.getElementById('list-view-container');
         const singleViewContainer = document.getElementById('single-view-container');
         const singleNavControls = document.getElementById('single-nav-controls');
-        
         const prevBtn = document.getElementById('prev-btn');
         const skipBtn = document.getElementById('skip-btn');
         const nextBtn = document.getElementById('next-btn');
@@ -434,42 +747,107 @@
         const restartBtn = document.getElementById('restart-btn');
         const navGrid = document.getElementById('nav-grid');
         const reviewContainer = document.getElementById('review-container');
-
-        // Profile Selection Engine Handles
         const profileToggleBtn = document.getElementById('profile-toggle-btn');
         const profileModal = document.getElementById('profile-modal');
         const closeProfileBtn = document.getElementById('close-profile-btn');
         const saveProfileBtn = document.getElementById('save-profile-btn');
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+        const langIndicator = document.getElementById('lang-indicator');
+        const entranceOverlay = document.getElementById('entrance-overlay');
 
+        // ==================== LANGUAGE SWITCH ====================
+        function switchLanguage() {
+            currentLang = currentLang === 'bn' ? 'en' : 'bn';
+            localStorage.setItem('exampulse_language', currentLang);
+            langIndicator.innerText = currentLang === 'bn' ? 'BN' : 'EN';
+            document.documentElement.lang = currentLang;
+            updateAllUILabels();
+            if (activeQuestions && activeQuestions.length > 0) {
+                if (viewMode === 'list') {
+                    buildListViewDOMTreeStructure();
+                    syncListViewDOMStates();
+                }
+                renderActiveQuestionState();
+                syncGridNavigatorStyles();
+            }
+            loadRandomMotivationalQuote();
+            document.title = currentLang === 'bn' ?
+                'ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল' :
+                'ExamPulse Pro - Premium MCQ Exam Portal';
+            handleExamModeFieldToggleUI();
+        }
+
+        function updateAllUILabels() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const translated = t(key);
+                if (el.tagName === 'OPTION' && el.hasAttribute('data-i18n')) {
+                    el.textContent = translated;
+                } else if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    // skip – placeholder handled separately
+                } else {
+                    el.textContent = translated;
+                }
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.placeholder = t(key);
+            });
+            document.querySelectorAll('option[data-i18n]').forEach(opt => {
+                opt.textContent = t(opt.getAttribute('data-i18n'));
+            });
+            handleExamModeFieldToggleUI();
+            if (fileUploadLabel.getAttribute('data-i18n')) {
+                const currentText = fileUploadLabel.innerText;
+                if (currentText.includes('আপলোড সফল') || currentText.includes('Upload Successful')) {
+                    fileUploadLabel.innerHTML = t('file_upload_success_html');
+                } else if (currentText.includes('.json') || currentText.includes('ফাইল')) {
+                    fileUploadLabel.textContent = t('json_upload_label');
+                }
+            }
+            const resumeBannerSpan = resumeBanner.querySelector('span.font-medium');
+            if (resumeBannerSpan) resumeBannerSpan.textContent = t('resume_banner_text');
+            skipBtn.textContent = t('skip_btn');
+            if (bookmarkText && activeQuestions && activeQuestions.length > 0) {
+                bookmarkText.textContent = bookmarks[currentIndex] ? t('bookmarked') : t('bookmark_btn');
+            }
+            if (activeQuestions && activeQuestions.length > 0 && questionCounter) {
+                questionCounter.textContent = t('question_counter', { current: currentIndex + 1, total: activeQuestions.length });
+            }
+            const startBtnSpan = startBtn.querySelector('span[data-i18n]');
+            if (startBtnSpan) startBtnSpan.textContent = t('start_exam_btn');
+        }
+
+        langToggleBtn.addEventListener('click', switchLanguage);
+
+        // ==================== ENTRANCE ANIMATION ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                entranceOverlay.classList.add('fade-out');
+                setTimeout(() => {
+                    if (entranceOverlay.parentNode) entranceOverlay.parentNode.removeChild(entranceOverlay);
+                }, 750);
+            }, 2200);
+        });
+
+        // ==================== BOOTSTRAP ====================
         window.addEventListener('DOMContentLoaded', bootstrapPortalEngine);
-        themeToggleBtn.addEventListener('click', toggleThemeModeConfiguration);
-        refreshQuoteBtn.addEventListener('click', loadRandomMotivationalQuote);
-        startBtn.addEventListener('click', () => initiateExamRoutine(false));
-        resumeBtn.addEventListener('click', () => initiateExamRoutine(true));
-        
-        fileUploadInput.addEventListener('change', handleNativeJSONFileUpload);
-        librarySaveBtn.addEventListener('click', saveActiveJSONToBrowserLibrary);
-        librarySelect.addEventListener('change', loadSelectedBankFromLibrary);
-
-        rangeStart.addEventListener('input', autoCalculateRecommendedTime);
-        rangeEnd.addEventListener('input', autoCalculateRecommendedTime);
-        examModeSelect.addEventListener('change', handleExamModeFieldToggleUI);
-        
-        prevBtn.addEventListener('click', () => shiftActiveQuestionIndex(-1));
-        skipBtn.addEventListener('click', () => { if(examMode !== 'poll') userAnswers[currentIndex] = null; cacheStateToLocalStorage(); shiftActiveQuestionIndex(1); });
-        nextBtn.addEventListener('click', () => shiftActiveQuestionIndex(1));
-        bookmarkToggleBtn.addEventListener('click', toggleSingleBookmarkState);
-        submitExamBtn.addEventListener('click', () => validateSubmissionRequestPrompt());
-        saveFileBtn.addEventListener('click', exportPerformanceReportToTextFile);
-        restartBtn.addEventListener('click', revertToHomeConsole);
-
-        // Profile Click Hooks
-        profileToggleBtn.addEventListener('click', () => profileModal.classList.remove('hidden'));
-        closeProfileBtn.addEventListener('click', () => profileModal.classList.add('hidden'));
-        saveProfileBtn.addEventListener('click', saveProfileDetailsEngine);
-        profileModal.addEventListener('click', (e) => { if(e.target === profileModal) profileModal.classList.add('hidden'); });
 
         function bootstrapPortalEngine() {
+            const savedLang = localStorage.getItem('exampulse_language');
+            if (savedLang === 'en') {
+                currentLang = 'en';
+                langIndicator.innerText = 'EN';
+                document.documentElement.lang = 'en';
+            } else {
+                currentLang = 'bn';
+                langIndicator.innerText = 'BN';
+                document.documentElement.lang = 'bn';
+            }
+            document.title = currentLang === 'bn' ?
+                'ExamPulse Pro - প্রিমিয়াম MCQ এক্সাম পোর্টাল' :
+                'ExamPulse Pro - Premium MCQ Exam Portal';
+
             const savedTheme = localStorage.getItem('exampulse_theme_mode');
             if (savedTheme === 'light') {
                 document.body.classList.add('light-theme');
@@ -479,15 +857,20 @@
             syncLibraryDropdownMenu();
             inspectCachedProgressTokens();
             initializeProfileSystemEngine();
+            updateAllUILabels();
+            handleExamModeFieldToggleUI();
         }
 
         function initializeProfileSystemEngine() {
             const defaultMetadata = {
                 name: "MD Irfun Sadi Topu",
-                institute: "ঢাকা মেডিকেল কলেজ (DMC)",
+                institute: currentLang === 'en' ? "Dhaka Medical College (DMC)" : "ঢাকা মেডিকেল কলেজ (DMC)",
                 email: "topu@exampulse.pro",
                 totalExams: 0,
-                lastScore: "০.০০"
+                lastScore: "০.০০",
+                totalCorrect: 0,
+                totalWrong: 0,
+                lastAccuracy: 0
             };
             let cache = JSON.parse(localStorage.getItem('exampulse_profile_data'));
             if (!cache) {
@@ -499,6 +882,8 @@
             document.getElementById('profile-email').value = cache.email || '';
             document.getElementById('profile-stat-exams').innerText = cache.totalExams || 0;
             document.getElementById('profile-stat-score').innerText = cache.lastScore || '০.০০';
+            const acc = cache.lastAccuracy !== undefined ? cache.lastAccuracy : (cache.totalCorrect !== undefined && cache.totalWrong !== undefined && (cache.totalCorrect + cache.totalWrong) > 0 ? Math.round((cache.totalCorrect / (cache.totalCorrect + cache.totalWrong)) * 100) : 0);
+            document.getElementById('profile-stat-accuracy').innerText = acc + '%';
         }
 
         function saveProfileDetailsEngine() {
@@ -506,31 +891,28 @@
             cache.name = document.getElementById('profile-name').value.trim();
             cache.institute = document.getElementById('profile-institute').value.trim();
             cache.email = document.getElementById('profile-email').value.trim();
-            
             localStorage.setItem('exampulse_profile_data', JSON.stringify(cache));
-            alert('প্রোফাইল তথ্য সফলভাবে সেভ করা হয়েছে!');
+            alert(t('profile_saved_alert'));
             profileModal.classList.add('hidden');
         }
 
         function handleNativeJSONFileUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
-
-            fileUploadLabel.innerText = `${file.name}`;
+            fileUploadLabel.textContent = `${file.name}`;
             const reader = new FileReader();
             reader.onload = function(evt) {
                 try {
                     const parsedData = JSON.parse(evt.target.result);
                     jsonInput.value = JSON.stringify(parsedData, null, 2);
-                    fileUploadLabel.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i> আপলোড সফল`;
-                    
-                    if(Array.isArray(parsedData)) {
+                    fileUploadLabel.innerHTML = t('file_upload_success_html');
+                    if (Array.isArray(parsedData)) {
                         rangeEnd.value = parsedData.length;
                         autoCalculateRecommendedTime();
                     }
-                } catch(err) {
-                    alert('ফাইলের ভেতরের জেসন কোড ফরম্যাটটি সঠিক নয়!');
-                    fileUploadLabel.innerText = ".json ফাইল আপলোড";
+                } catch (err) {
+                    alert(t('json_invalid_alert'));
+                    fileUploadLabel.textContent = t('json_upload_label');
                 }
             };
             reader.readAsText(file);
@@ -539,26 +921,22 @@
         function saveActiveJSONToBrowserLibrary() {
             const labelName = libraryNameInput.value.trim();
             const jsonText = jsonInput.value.trim();
-
-            if (!labelName) return alert('অনুগ্রহ করে কোশ্চেন ব্যাংকের একটি নাম দাও!');
-            if (!jsonText) return alert('কোড বক্সে কোনো জেসন ডাটা উপস্থিত নেই!');
-
+            if (!labelName) return alert(t('bank_name_required_alert'));
+            if (!jsonText) return alert(t('json_empty_alert'));
             try {
                 const parsed = JSON.parse(jsonText);
                 let library = JSON.parse(localStorage.getItem('exampulse_question_library') || '{}');
                 library[labelName] = parsed;
                 localStorage.setItem('exampulse_question_library', JSON.stringify(library));
-                
                 libraryNameInput.value = '';
                 syncLibraryDropdownMenu();
-                alert(`"${labelName}" লাইব্রেরিতে সেভ করা হয়েছে!`);
-            } catch(e) { alert('জেসন ডাটা সঠিক নয়, সেভ করা ব্যর্থ হয়েছে।'); }
+                alert(t('library_saved_alert', { name: labelName }));
+            } catch (e) { alert(t('json_save_failed_alert')); }
         }
 
         function syncLibraryDropdownMenu() {
             const library = JSON.parse(localStorage.getItem('exampulse_question_library') || '{}');
-            librarySelect.innerHTML = '<option value="">-- লাইব্রেরি থেকে সিলেক্ট করুন --</option>';
-            
+            librarySelect.innerHTML = `<option value="">${t('library_default_option')}</option>`;
             Object.keys(library).forEach(bankName => {
                 const opt = document.createElement('option');
                 opt.value = bankName;
@@ -570,11 +948,9 @@
         function loadSelectedBankFromLibrary() {
             const selectedKey = librarySelect.value;
             if (!selectedKey) return;
-
             const library = JSON.parse(localStorage.getItem('exampulse_question_library') || '{}');
             const dataSet = library[selectedKey];
-
-            if(dataSet) {
+            if (dataSet) {
                 jsonInput.value = JSON.stringify(dataSet, null, 2);
                 rangeStart.value = 1;
                 rangeEnd.value = dataSet.length;
@@ -583,8 +959,7 @@
         }
 
         function loadRandomMotivationalQuote() {
-            const randIndex = Math.floor(Math.random() * motivationalQuotes.length);
-            quoteTextNode.innerText = motivationalQuotes[randIndex];
+            quoteTextNode.innerText = getMotivationalQuote();
         }
 
         function toggleThemeModeConfiguration() {
@@ -604,11 +979,11 @@
 
         function handleExamModeFieldToggleUI() {
             if (examModeSelect.value === 'poll') {
-                durationLabel.innerText = "প্রতি প্রশ্নের সময় (সেকেন্ড):";
-                examDurationInput.value = "৩০";
+                durationLabel.textContent = t('time_label_poll');
+                if (!activeQuestions.length) examDurationInput.value = "৩০";
             } else {
-                durationLabel.innerText = "পরীক্ষার সময় (মিনিট):";
-                autoCalculateRecommendedTime();
+                durationLabel.textContent = t('time_label');
+                if (!activeQuestions.length) autoCalculateRecommendedTime();
             }
         }
 
@@ -617,7 +992,7 @@
             let start = parseInt(rangeStart.value) || 1;
             let end = parseInt(rangeEnd.value) || 1;
             let count = Math.max(0, end - start + 1);
-            examDurationInput.value = Math.ceil(count * 0.5) || 1; 
+            examDurationInput.value = Math.ceil(count * 0.5) || 1;
         }
 
         function inspectCachedProgressTokens() {
@@ -626,7 +1001,7 @@
                 try {
                     const data = JSON.parse(token);
                     if (data.hasActiveExam) resumeBanner.classList.remove('hidden');
-                } catch(e) { localStorage.removeItem('exampulse_active_session'); }
+                } catch (e) { localStorage.removeItem('exampulse_active_session'); }
             }
         }
 
@@ -647,21 +1022,16 @@
                 isTimerPaused = cache.isTimerPaused || false;
             } else {
                 const raw = jsonInput.value.trim();
-                if (!raw) return alert('অনুগ্রহ করে আগে বক্সে জেসন কোড পেস্ট করো অথবা ফাইল আপলোড করো!');
-
+                if (!raw) return alert(t('json_required_alert'));
                 try {
                     masterQuestions = JSON.parse(raw);
-                } catch(e) { return alert('ভুল JSON ফরম্যাট! ব্র্যাকেট বা কমা ঠিক আছে কিনা চেক করো।'); }
-
+                } catch (e) { return alert(t('json_parse_error_alert')); }
                 let start = parseInt(rangeStart.value) || 1;
                 let end = parseInt(rangeEnd.value) || masterQuestions.length;
-
                 if (start < 1) start = 1;
                 if (end > masterQuestions.length) end = masterQuestions.length;
                 activeQuestions = masterQuestions.slice(start - 1, end);
-                
-                if (activeQuestions.length === 0) return alert('এই রেঞ্জের ভেতর কোনো প্রশ্ন পাওয়া যায়নি!');
-
+                if (activeQuestions.length === 0) return alert(t('range_empty_alert'));
                 currentIndex = 0;
                 userAnswers = new Array(activeQuestions.length).fill(null);
                 bookmarks = new Array(activeQuestions.length).fill(false);
@@ -670,7 +1040,6 @@
                 negativeMarkVal = parseFloat(negativeMarkSelect.value);
                 isTimerPaused = false;
                 stopwatchElapsed = 0;
-                
                 if (examMode === 'exam') {
                     let customMinutes = parseInt(examDurationInput.value) || 10;
                     totalSeconds = customMinutes * 60;
@@ -680,20 +1049,17 @@
                     secondsRemaining = totalSeconds;
                 }
             }
-
             setupSection.classList.add('hidden');
             resumeBanner.classList.add('hidden');
             examSection.classList.remove('hidden');
             liveTimerContainer.classList.remove('hidden');
-            
             if (negativeMarkVal > 0) activeNegativeBadge.classList.remove('hidden');
-
             generateNavigationGridOMR();
             if (viewMode === 'list') buildListViewDOMTreeStructure();
-            
             renderActiveQuestionState();
             launchTimerThreads();
             cacheStateToLocalStorage();
+            updateAllUILabels();
         }
 
         function cacheStateToLocalStorage() {
@@ -726,18 +1092,16 @@
                         secondsRemaining--;
                     }
                 }
-                
                 refreshTimerUI();
                 if (secondsRemaining % 5 === 0) cacheStateToLocalStorage();
-
                 if (examMode === 'exam' && secondsRemaining <= 0) {
                     clearInterval(examTimer);
-                    alert('সময় শেষ! তোমার পরীক্ষাটি অটো-সাবমিট করা হচ্ছে।');
+                    alert(t('time_up_alert'));
                     compileFinalPerformanceReport();
                 } else if (examMode === 'poll' && viewMode === 'single' && secondsRemaining <= 0) {
                     isTimerPaused = true;
                     if (userAnswers[currentIndex] === null) {
-                        userAnswers[currentIndex] = -1; 
+                        userAnswers[currentIndex] = -1;
                     }
                     cacheStateToLocalStorage();
                     renderActiveQuestionState();
@@ -761,16 +1125,13 @@
 
         function renderActiveQuestionState() {
             if (!activeQuestions || activeQuestions.length === 0) return;
-
             if (viewMode === 'single') {
                 singleViewContainer.classList.remove('hidden');
                 listViewContainer.classList.add('hidden');
                 singleNavControls.classList.remove('hidden');
-                
                 if (examMode === 'poll') {
                     isTimerPaused = userAnswers[currentIndex] !== null;
                 }
-                
                 renderSingleQuestionCanvas();
             } else {
                 singleViewContainer.classList.add('hidden');
@@ -778,70 +1139,64 @@
                 singleNavControls.classList.add('hidden');
                 syncListViewDOMStates();
             }
-            
-            let answeredCount = userAnswers.filter(ans => ans !== null).length;
+            let answeredCount = userAnswers.filter(ans => ans !== null && ans !== -1).length;
             let progressPercentage = viewMode === 'single' ? ((currentIndex + 1) / activeQuestions.length) * 100 : (answeredCount / activeQuestions.length) * 100;
             progressBar.style.width = `${progressPercentage}%`;
-
             syncGridNavigatorStyles();
+            updateAllUILabels();
         }
 
         function renderSingleQuestionCanvas() {
             const targetQ = activeQuestions[currentIndex];
-            questionCounter.innerText = `প্রশ্ন নম্বর: ${currentIndex + 1} / ${activeQuestions.length}`;
+            questionCounter.textContent = t('question_counter', { current: currentIndex + 1, total: activeQuestions.length });
             questionText.innerText = targetQ.q;
-
             if (bookmarks[currentIndex]) {
                 bookmarkIcon.className = "fa-solid fa-bookmark text-amber-500";
-                bookmarkText.innerText = "বুকমার্কড";
+                bookmarkText.textContent = t('bookmarked');
             } else {
                 bookmarkIcon.className = "fa-regular fa-bookmark";
-                bookmarkText.innerText = "বুকমার্ক করুন";
+                bookmarkText.textContent = t('bookmark_btn');
             }
-
             optionsContainer.innerHTML = '';
             instantPollFeedback.classList.add('hidden');
             instantPollFeedback.innerHTML = '';
-
-            const isCurrentQuestionAnswered = userAnswers[currentIndex] !== null;
-
+            const isCurrentQuestionAnswered = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== -1;
             targetQ.options.forEach((opt, idx) => {
                 const isSelected = userAnswers[currentIndex] === idx;
                 let optClasses = "p-4 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input ";
-                
                 if (examMode === 'poll' && isCurrentQuestionAnswered) {
                     optClasses += "pointer-events-none ";
                     if (idx === targetQ.correct) optClasses += "state-success font-semibold shadow-sm ";
                     else if (isSelected) optClasses += "state-error font-semibold ";
                     else optClasses += "opacity-40 ";
+                } else if (examMode === 'poll' && userAnswers[currentIndex] === -1) {
+                    optClasses += "pointer-events-none opacity-40 ";
                 } else {
                     if (isSelected) optClasses += "state-selected font-semibold shadow-md ";
                     else optClasses += "hover:border-slate-400 dark:hover:border-slate-700/80 ";
                 }
-
                 const card = document.createElement('div');
                 card.className = optClasses;
                 card.onclick = () => {
-                    if (examMode === 'poll' && isCurrentQuestionAnswered) return;
+                    if (examMode === 'poll' && (isCurrentQuestionAnswered || userAnswers[currentIndex] === -1)) return;
                     userAnswers[currentIndex] = idx;
-                    if (examMode === 'poll') isTimerPaused = true; 
+                    if (examMode === 'poll') isTimerPaused = true;
                     cacheStateToLocalStorage();
                     renderActiveQuestionState();
                 };
-                
                 let checkMarker = "";
-                if (examMode === 'poll' && isCurrentQuestionAnswered) {
+                if (examMode === 'poll' && (isCurrentQuestionAnswered || userAnswers[currentIndex] === -1)) {
                     if (idx === targetQ.correct) checkMarker = '<i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-500 text-base"></i>';
                     else if (isSelected) checkMarker = '<i class="fa-solid fa-circle-xmark text-rose-600 dark:text-rose-500 text-base"></i>';
                 } else {
                     checkMarker = isSelected ? '<div class="w-2 h-2 rounded-full bg-indigo-600 dark:bg-white"></div>' : '';
                 }
-
+                const letter = getOptionLetter(idx);
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
                         <span class="w-7 h-7 flex items-center justify-center text-xs font-bold rounded-lg ${
                             isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-500/10 custom-text-body group-hover:bg-slate-500/20'
-                        }">${String.fromCharCode(0x0995 + idx)}</span>
+                        }">${letter}</span>
                         <span class="text-sm font-medium">${opt}</span>
                     </div>
                     <div class="w-5 h-5 rounded-full border flex items-center justify-center ${isSelected ? 'border-indigo-500 bg-indigo-600/10 dark:bg-indigo-600' : 'border-slate-300 dark:border-slate-800'}">
@@ -850,23 +1205,23 @@
                 `;
                 optionsContainer.appendChild(card);
             });
-
-            if (examMode === 'poll' && isCurrentQuestionAnswered) {
+            if (examMode === 'poll' && (isCurrentQuestionAnswered || userAnswers[currentIndex] === -1)) {
                 instantPollFeedback.classList.remove('hidden');
                 const isUserCorrect = userAnswers[currentIndex] === targetQ.correct;
                 const isTimeout = userAnswers[currentIndex] === -1;
-                
-                let alertString = isUserCorrect ? 'সঠিক উত্তর!' : `ভুল উত্তর! সঠিক উত্তর হলো: ${String.fromCharCode(0x0995 + targetQ.correct)}`;
-                if(isTimeout) alertString = `সময় শেষ! সঠিক উত্তর হলো: ${String.fromCharCode(0x0995 + targetQ.correct)}`;
-
+                const correctLetter = getOptionLetter(targetQ.correct);
+                let alertString = isUserCorrect ? t('correct_answer') :
+                    isTimeout ? t('timeout_correct_is', { correct: correctLetter }) :
+                    t('wrong_answer_correct_is', { correct: correctLetter });
+                let iconClass = isUserCorrect ? 'fa-solid fa-face-smile text-base' : 'fa-solid fa-circle-exclamation text-base';
                 instantPollFeedback.innerHTML = `
                     <div class="p-4 rounded-xl border ${isUserCorrect ? 'state-success' : 'state-error'} text-xs font-bold mb-3 flex items-center gap-2">
-                        <i class="${isUserCorrect ? 'fa-solid fa-face-smile text-base' : 'fa-solid fa-circle-exclamation text-base'}"></i>
+                        <i class="${iconClass}"></i>
                         <span>${alertString}</span>
                     </div>
                     ${targetQ.explanation ? `
                         <div class="p-4 rounded-xl custom-input border text-xs leading-relaxed shadow-sm">
-                            <strong class="text-indigo-500 dark:text-indigo-400 block mb-1 font-bold"><i class="fa-solid fa-lightbulb"></i> মেডিকেল ব্যাখ্যা:</strong>
+                            <strong class="text-indigo-500 dark:text-indigo-400 block mb-1 font-bold"><i class="fa-solid fa-lightbulb"></i> ${t('medical_explanation')}</strong>
                             <p class="custom-text-body">${targetQ.explanation}</p>
                         </div>
                     ` : ''}
@@ -880,23 +1235,22 @@
                 const block = document.createElement('div');
                 block.id = `list-q-card-${qIdx}`;
                 block.className = "p-5 rounded-xl border custom-card space-y-4 shadow-sm";
-                
                 let optsRowsHtml = '';
                 q.options.forEach((opt, oIdx) => {
+                    const letter = getOptionLetter(oIdx);
                     optsRowsHtml += `
                         <div id="list-opt-${qIdx}-${oIdx}" onclick="handleListOptionSelectionTrigger(${qIdx}, ${oIdx})" class="p-3 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input">
                             <div class="flex items-center gap-3">
-                                <span id="list-opt-num-${qIdx}-${oIdx}" class="w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded-lg bg-slate-500/10 custom-text-body">${String.fromCharCode(0x0995 + oIdx)}</span>
+                                <span id="list-opt-num-${qIdx}-${oIdx}" class="w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded-lg bg-slate-500/10 custom-text-body">${letter}</span>
                                 <span class="text-sm">${opt}</span>
                             </div>
                             <div id="list-opt-circle-${qIdx}-${oIdx}" class="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-800 flex items-center justify-center"></div>
                         </div>
                     `;
                 });
-
                 block.innerHTML = `
                     <div class="flex justify-between items-center border-b pb-2 custom-border">
-                        <span class="text-xs font-bold text-indigo-500 dark:text-indigo-400">প্রশ্ন নম্বর: ${qIdx + 1} / ${activeQuestions.length}</span>
+                        <span class="text-xs font-bold text-indigo-500 dark:text-indigo-400">${t('question_counter', { current: qIdx + 1, total: activeQuestions.length })}</span>
                         <button onclick="handleListBookmarkStateToggle(${qIdx})" class="text-xs font-bold text-amber-500 flex items-center gap-1.5 focus:outline-none">
                             <i id="list-bookmark-icon-${qIdx}" class="fa-regular fa-bookmark"></i>
                         </button>
@@ -911,33 +1265,29 @@
 
         function syncListViewDOMStates() {
             if (!activeQuestions || activeQuestions.length === 0) return;
-
             activeQuestions.forEach((q, qIdx) => {
                 const ua = userAnswers[qIdx];
-                const isAnswered = ua !== null;
-                
+                const isAnswered = ua !== null && ua !== -1;
+                const isTimeout = ua === -1;
                 const bIcon = document.getElementById(`list-bookmark-icon-${qIdx}`);
                 if (bIcon) bIcon.className = bookmarks[qIdx] ? "fa-solid fa-bookmark text-amber-500" : "fa-regular fa-bookmark";
-                
                 q.options.forEach((opt, oIdx) => {
                     const row = document.getElementById(`list-opt-${qIdx}-${oIdx}`);
                     const num = document.getElementById(`list-opt-num-${qIdx}-${oIdx}`);
                     const circle = document.getElementById(`list-opt-circle-${qIdx}-${oIdx}`);
-                    
                     if (!row) return;
                     row.className = "p-3 rounded-xl border cursor-pointer transition duration-150 flex items-center justify-between group custom-input ";
                     num.className = "w-6 h-6 flex items-center justify-center text-[11px] font-bold rounded-lg ";
                     circle.className = "w-4 h-4 rounded-full border flex items-center justify-center ";
                     circle.innerHTML = '';
-
-                    if (examMode === 'poll' && isAnswered) {
+                    if (examMode === 'poll' && (isAnswered || isTimeout)) {
                         row.classList.add("pointer-events-none");
                         if (oIdx === q.correct) {
                             row.className += "state-success font-semibold shadow-sm ";
                             num.className += "bg-emerald-600 text-white ";
                             circle.className += "border-emerald-500 bg-emerald-600 ";
                             circle.innerHTML = '<i class="fa-solid fa-check text-[9px] text-white"></i>';
-                        } else if (oIdx === ua) {
+                        } else if (oIdx === ua && ua !== -1) {
                             row.className += "state-error font-semibold ";
                             num.className += "bg-rose-600 text-white ";
                             circle.className += "border-rose-500 bg-rose-600 ";
@@ -960,20 +1310,21 @@
                         }
                     }
                 });
-
                 const feedback = document.getElementById(`list-poll-feedback-${qIdx}`);
                 if (feedback) {
-                    if (examMode === 'poll' && isAnswered) {
+                    if (examMode === 'poll' && (isAnswered || isTimeout)) {
                         feedback.classList.remove('hidden');
                         const isUserCorrect = ua === q.correct;
+                        const correctLetter = getOptionLetter(q.correct);
+                        const alertStr = isUserCorrect ? t('correct_answer') : (isTimeout ? t('timeout_correct_is', { correct: correctLetter }) : t('wrong_answer_correct_is', { correct: correctLetter }));
                         feedback.innerHTML = `
                             <div class="mt-2.5 p-3 rounded-xl border ${isUserCorrect ? 'state-success' : 'state-error'} text-[11px] font-bold flex items-center gap-1.5">
                                 <i class="${isUserCorrect ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'}"></i>
-                                <span>${isUserCorrect ? 'সঠিক উত্তর!' : `ভুল উত্তর! সঠিক উত্তর: ${String.fromCharCode(0x0995 + q.correct)}`}</span>
+                                <span>${alertStr}</span>
                             </div>
                             ${q.explanation ? `
                                 <div class="mt-2 p-3 custom-input border rounded-xl text-[11px] leading-relaxed shadow-sm">
-                                    <strong class="text-indigo-500 dark:text-indigo-400 block mb-0.5"><i class="fa-solid fa-lightbulb"></i> মেডিকেল ব্যাখ্যা:</strong>
+                                    <strong class="text-indigo-500 dark:text-indigo-400 block mb-0.5"><i class="fa-solid fa-lightbulb"></i> ${t('medical_explanation')}</strong>
                                     <span class="custom-text-body">${q.explanation}</span>
                                 </div>
                             ` : ''}
@@ -987,7 +1338,7 @@
         }
 
         function handleListOptionSelectionTrigger(qIdx, oIdx) {
-            if (examMode === 'poll' && userAnswers[qIdx] !== null) return;
+            if (examMode === 'poll' && userAnswers[qIdx] !== null && userAnswers[qIdx] !== -1) return;
             userAnswers[qIdx] = oIdx;
             cacheStateToLocalStorage();
             renderActiveQuestionState();
@@ -1009,12 +1360,10 @@
             let target = currentIndex + direction;
             if (target >= 0 && target < activeQuestions.length) {
                 currentIndex = target;
-                
                 if (examMode === 'poll') {
-                    isTimerPaused = userAnswers[currentIndex] !== null;
-                    if(!isTimerPaused) secondsRemaining = totalSeconds; 
+                    isTimerPaused = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== -1;
+                    if (!isTimerPaused) secondsRemaining = totalSeconds;
                 }
-
                 cacheStateToLocalStorage();
                 renderActiveQuestionState();
             } else if (target === activeQuestions.length) {
@@ -1028,15 +1377,14 @@
                 const btn = document.createElement('button');
                 btn.id = `nav-cell-${idx}`;
                 btn.innerText = idx + 1;
-                
-                btn.onclick = () => { 
+                btn.onclick = () => {
                     if (viewMode === 'single') {
-                        currentIndex = idx; 
+                        currentIndex = idx;
                         if (examMode === 'poll') {
-                            isTimerPaused = userAnswers[currentIndex] !== null;
-                            if(!isTimerPaused) secondsRemaining = totalSeconds;
+                            isTimerPaused = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== -1;
+                            if (!isTimerPaused) secondsRemaining = totalSeconds;
                         }
-                        renderActiveQuestionState(); 
+                        renderActiveQuestionState();
                     } else {
                         const cardElement = document.getElementById(`list-q-card-${idx}`);
                         if (cardElement) {
@@ -1050,80 +1398,91 @@
 
         function syncGridNavigatorStyles() {
             if (!activeQuestions || activeQuestions.length === 0) return;
-
             activeQuestions.forEach((_, idx) => {
                 const node = document.getElementById(`nav-cell-${idx}`);
                 if (!node) return;
-
                 let baseClasses = "p-2.5 text-xs font-bold rounded-xl border font-mono transition relative focus:outline-none ";
                 if (bookmarks[idx]) {
                     baseClasses += "ring-2 ring-amber-500 ring-offset-2 ring-offset-slate-100 dark:ring-offset-slate-950 ";
                 }
-
+                const answer = userAnswers[idx];
                 if (viewMode === 'single' && idx === currentIndex) {
                     node.className = baseClasses + "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20";
-                } else if (userAnswers[idx] !== null) {
+                } else if (answer !== null && answer !== -1) {
                     if (examMode === 'poll') {
-                        const isNodeCorrect = userAnswers[idx] === activeQuestions[idx].correct;
+                        const isNodeCorrect = answer === activeQuestions[idx].correct;
                         node.className = baseClasses + (isNodeCorrect ? "state-success" : "state-error");
                     } else {
                         node.className = baseClasses + "state-selected";
                     }
+                } else if (answer === -1) {
+                    node.className = baseClasses + "state-info";
                 } else {
                     node.className = baseClasses + "custom-input hover:border-slate-400 dark:hover:border-slate-800";
                 }
             });
         }
 
-        function validateSubmissionRequestPrompt() {
-            if (confirm('তুমি কি নিশ্চিতভাবে পরীক্ষা শেষ করে ওএমআর জমা দিতে চাও?')) {
+        function verifyFinalSubmissionRequest() {
+            if (confirm(t('submit_confirm'))) {
                 compileFinalPerformanceReport();
             }
         }
 
+        function validateSubmissionRequestPrompt() {
+            if (confirm(t('submit_confirm'))) {
+                compileFinalPerformanceReport();
+            }
+        }
+
+        // ==================== UPDATED SCORING: TIMEOUT = SKIPPED ====================
         function compileFinalPerformanceReport() {
             clearInterval(examTimer);
-            localStorage.removeItem('exampulse_active_session'); 
-
+            localStorage.removeItem('exampulse_active_session');
             examSection.classList.add('hidden');
             activeNegativeBadge.classList.add('hidden');
             liveTimerContainer.classList.add('hidden');
             resultSection.classList.remove('hidden');
-
             let total = activeQuestions.length;
             let correct = 0, wrong = 0, skipped = 0;
-
             activeQuestions.forEach((q, idx) => {
-                if (userAnswers[idx] === null) skipped++;
-                else if (userAnswers[idx] === q.correct) correct++;
-                else wrong++; 
+                const ans = userAnswers[idx];
+                if (ans === null || ans === -1) {
+                    skipped++;   // null = skipped, -1 = timed out → both are skipped
+                } else if (ans === q.correct) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
             });
-
             let penaltyScore = wrong * negativeMarkVal;
             let finalScoreMetric = correct - penaltyScore;
+            let totalAnswered = correct + wrong;
+            let accuracyPct = totalAnswered > 0 ? Math.round((correct / totalAnswered) * 100) : 0;
 
-            document.getElementById('stat-total').innerText = `মোট প্রশ্ন: ${total}`;
-            document.getElementById('stat-correct').innerText = `সঠিক: ${correct}`;
-            document.getElementById('stat-wrong').innerText = `ভুল: ${wrong}`;
-            document.getElementById('stat-deducted').innerText = `কাটা নম্বর: -${penaltyScore.toFixed(2)}`;
-            document.getElementById('stat-skipped').innerText = `স্কিপ: ${skipped}`;
-            
+            document.getElementById('stat-total').innerText = t('total_questions', { count: total });
+            document.getElementById('stat-correct').innerText = t('correct_label', { count: correct });
+            document.getElementById('stat-wrong').innerText = t('wrong_label', { count: wrong });
+            document.getElementById('stat-accuracy').innerText = t('accuracy_label', { pct: accuracyPct });
+            document.getElementById('stat-deducted').innerText = t('deducted_label', { val: penaltyScore.toFixed(2) });
+            document.getElementById('stat-skipped').innerText = t('skipped_label', { count: skipped });
             document.getElementById('result-percent').innerText = `${finalScoreMetric.toFixed(2)} / ${total}`;
-
             const circ = 2 * Math.PI * 52;
             let conversionPct = finalScoreMetric > 0 ? (finalScoreMetric / total) * 100 : 0;
             document.getElementById('result-ring').style.strokeDashoffset = circ - (conversionPct / 100) * circ;
 
-            // Sync Stats to Profile Metadata Engine
             let profileCache = JSON.parse(localStorage.getItem('exampulse_profile_data')) || {};
             profileCache.totalExams = (parseInt(profileCache.totalExams) || 0) + 1;
             profileCache.lastScore = `${finalScoreMetric.toFixed(2)} / ${total}`;
+            profileCache.totalCorrect = (profileCache.totalCorrect || 0) + correct;
+            profileCache.totalWrong = (profileCache.totalWrong || 0) + wrong;
+            profileCache.lastAccuracy = accuracyPct;
             localStorage.setItem('exampulse_profile_data', JSON.stringify(profileCache));
-            
             document.getElementById('profile-stat-exams').innerText = profileCache.totalExams;
             document.getElementById('profile-stat-score').innerText = profileCache.lastScore;
-
+            document.getElementById('profile-stat-accuracy').innerText = accuracyPct + '%';
             renderReviewFeedDashboard();
+            updateAllUILabels();
         }
 
         function renderReviewFeedDashboard() {
@@ -1131,49 +1490,42 @@
             activeQuestions.forEach((q, idx) => {
                 const ua = userAnswers[idx];
                 const isCorrect = ua === q.correct;
-                const isSkipped = ua === null;
+                const isSkipped = ua === null || ua === -1;
                 const isTimeout = ua === -1;
-                
                 const card = document.createElement('div');
                 card.className = `p-5 rounded-2xl border custom-card ${
                     isSkipped ? '' : isCorrect ? 'border-emerald-500/30 bg-emerald-500/5' : 'border-rose-500/30 bg-rose-500/5'
                 }`;
-
                 let optsBlockHtml = '';
                 q.options.forEach((opt, oIdx) => {
                     let badge = "bg-slate-500/10 custom-text-muted border-slate-200 dark:border-slate-800";
                     let classes = "custom-border bg-slate-500/5 custom-text-body";
-
                     if (oIdx === q.correct) {
                         badge = "bg-emerald-600 text-white";
                         classes = "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold";
-                    } else if (oIdx === ua && !isCorrect) {
+                    } else if (oIdx === ua && !isCorrect && ua !== -1) {
                         badge = "bg-rose-600 text-white";
                         classes = "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-400 font-semibold";
                     }
-
+                    const letter = getOptionLetter(oIdx);
                     optsBlockHtml += `
                         <div class="p-3 rounded-xl border text-sm flex items-center gap-3 ${classes}">
-                            <span class="w-6 h-6 flex items-center justify-center text-[10px] font-black rounded-md ${badge}">${String.fromCharCode(0x0995 + oIdx)}</span>
+                            <span class="w-6 h-6 flex items-center justify-center text-[10px] font-black rounded-md ${badge}">${letter}</span>
                             <span>${opt}</span>
                         </div>
                     `;
                 });
-
-                let statusBadge = isCorrect 
-                    ? `<span class="text-xs font-bold state-success px-2.5 py-1 rounded-md border border-emerald-500/30"><i class="fa-solid fa-check"></i> সঠিক</span>`
-                    : isSkipped 
-                    ? `<span class="text-xs font-bold custom-input px-2.5 py-1 rounded-md border"><i class="fa-solid fa-minus"></i> স্কিপড</span>`
-                    : isTimeout
-                    ? `<span class="text-xs font-bold state-error px-2.5 py-1 rounded-md border border-rose-500/30"><i class="fa-solid fa-triangle-exclamation"></i> টাইম আউট</span>`
-                    : `<span class="text-xs font-bold state-error px-2.5 py-1 rounded-md border border-rose-500/30"><i class="fa-solid fa-xmark"></i> ভুল (-${negativeMarkVal})</span>`;
-
-                let bookmarkBadge = bookmarks[idx] ? `<span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-md"><i class="fa-solid fa-bookmark"></i> বুকমার্কড ছিল</span>` : '';
-
+                let statusBadge = isCorrect ?
+                    `<span class="text-xs font-bold state-success px-2.5 py-1 rounded-md border border-emerald-500/30"><i class="fa-solid fa-check"></i> ${t('correct_badge')}</span>` :
+                    isSkipped ?
+                    (isTimeout ? `<span class="text-xs font-bold state-info px-2.5 py-1 rounded-md border"><i class="fa-solid fa-clock"></i> ${t('timeout_badge')}</span>` : `<span class="text-xs font-bold custom-input px-2.5 py-1 rounded-md border"><i class="fa-solid fa-minus"></i> ${t('skipped_badge')}</span>`) :
+                    `<span class="text-xs font-bold state-error px-2.5 py-1 rounded-md border border-rose-500/30"><i class="fa-solid fa-xmark"></i> ${t('wrong_badge')} (-${negativeMarkVal})</span>`;
+                let bookmarkBadge = bookmarks[idx] ?
+                    `<span class="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-md"><i class="fa-solid fa-bookmark"></i> ${t('was_bookmarked')}</span>` : '';
                 card.innerHTML = `
                     <div class="flex items-center justify-between gap-4 mb-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold tracking-wide custom-text-muted uppercase">প্রশ্ন নম্বর: ${idx + 1}</span>
+                            <span class="text-xs font-bold tracking-wide custom-text-muted uppercase">${t('question_number_review', { num: idx + 1 })}</span>
                             ${bookmarkBadge}
                         </div>
                         ${statusBadge}
@@ -1182,7 +1534,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4">${optsBlockHtml}</div>
                     ${q.explanation ? `
                         <div class="mt-3 p-3.5 rounded-xl bg-slate-500/5 border custom-border text-xs leading-relaxed shadow-sm">
-                            <strong class="text-indigo-600 dark:text-indigo-400 font-bold block mb-1"><i class="fa-solid fa-lightbulb"></i> মেডিকেল ব্যাখ্যা:</strong>
+                            <strong class="text-indigo-600 dark:text-indigo-400 font-bold block mb-1"><i class="fa-solid fa-lightbulb"></i> ${t('medical_explanation')}</strong>
                             <p class="custom-text-body">${q.explanation}</p>
                         </div>
                     ` : ''}
@@ -1195,41 +1547,42 @@
             let total = activeQuestions.length;
             let correct = 0, wrong = 0, skipped = 0;
             activeQuestions.forEach((q, idx) => {
-                if (userAnswers[idx] === null) skipped++;
-                else if (userAnswers[idx] === q.correct) correct++;
+                const ans = userAnswers[idx];
+                if (ans === null || ans === -1) skipped++;
+                else if (ans === q.correct) correct++;
                 else wrong++;
             });
             let finalScore = correct - (wrong * negativeMarkVal);
+            let totalAnswered = correct + wrong;
+            let accuracyPct = totalAnswered > 0 ? Math.round((correct / totalAnswered) * 100) : 0;
 
             let txt = `==================================================\n`;
             txt += `           EXAMPULSE PRO PERFORMANCE REPORT       \n`;
             txt += `==================================================\n`;
-            txt += `তারিখ ও সময় : ${new Date().toLocaleString('bn-BD')}\n`;
-            txt += `প্র্যাকটিস মোড: ${examMode === 'poll' ? 'Poll Mode' : 'Standard Exam Mode'}\n`;
-            txt += `প্রশ্ন ভিউ মোড: ${viewMode === 'list' ? 'List View' : 'One-by-One View'}\n`;
+            txt += `Date & Time : ${new Date().toLocaleString(currentLang === 'bn' ? 'bn-BD' : 'en-US')}\n`;
+            txt += `Practice Mode: ${examMode === 'poll' ? 'Poll Mode' : 'Standard Exam Mode'}\n`;
+            txt += `Question View Mode: ${viewMode === 'list' ? 'List View' : 'One-by-One View'}\n`;
             txt += `--------------------------------------------------\n`;
-            txt += `মোট প্রশ্ন  : ${total}\n`;
-            txt += `সঠিক উত্তর  : ${correct}\n`;
-            txt += `ভুল উত্তর   : ${wrong}\n`;
-            txt += `স্কিপড      : ${skipped}\n`;
-            txt += `নেগেটিভ মার্ক: -${(wrong * negativeMarkVal).toFixed(2)}\n`;
-            txt += `চূড়ান্ত স্কোর: ${finalScore.toFixed(2)} / ${total}\n`;
+            txt += `Total Questions  : ${total}\n`;
+            txt += `Correct Answers  : ${correct}\n`;
+            txt += `Wrong Answers    : ${wrong}\n`;
+            txt += `Skipped (incl. Timeouts) : ${skipped}\n`;
+            txt += `Accuracy         : ${accuracyPct}%\n`;
+            txt += `Negative Marking : -${(wrong * negativeMarkVal).toFixed(2)}\n`;
+            txt += `Final Score      : ${finalScore.toFixed(2)} / ${total}\n`;
             txt += `==================================================\n\n`;
-            txt += `               প্রশ্ন ও উত্তরপত্র পর্যালোচনা           \n`;
+            txt += `               Question & Answer Review           \n`;
             txt += `--------------------------------------------------\n`;
-
             activeQuestions.forEach((q, idx) => {
                 let ua = userAnswers[idx];
-                let userAnsStr = ua === -1 ? "টাইম আউট (উত্তর দেওয়া হয়নি)" : ua !== null ? q.options[ua] : "স্কিপ করা হয়েছে";
+                let userAnsStr = ua === -1 ? "Timed Out" : ua !== null ? q.options[ua] : "Skipped";
                 let correctAnsStr = q.options[q.correct];
-
-                txt += `${idx + 1}. প্রশ্ন: ${q.q}\n`;
-                txt += `   তোমার উত্তর: ${userAnsStr}\n`;
-                txt += `   সঠিক উত্তর  : ${correctAnsStr}\n`;
-                if(q.explanation) txt += `   ব্যাখ্যা     : ${q.explanation}\n`;
+                txt += `${idx + 1}. Question: ${q.q}\n`;
+                txt += `   Your Answer   : ${userAnsStr}\n`;
+                txt += `   Correct Answer: ${correctAnsStr}\n`;
+                if (q.explanation) txt += `   Explanation   : ${q.explanation}\n`;
                 txt += `--------------------------------------------------\n`;
             });
-
             const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
             const url = URL.createObjectURL(blob);
             const anchor = document.createElement('a');
@@ -1245,17 +1598,46 @@
             resultSection.classList.add('hidden');
             setupSection.classList.remove('hidden');
             inspectCachedProgressTokens();
+            updateAllUILabels();
+            handleExamModeFieldToggleUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    </script>
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker Registered!'))
-                .catch(err => console.log('SW Registration failed:', err));
+
+        // ==================== EVENT LISTENERS ====================
+        themeToggleBtn.addEventListener('click', toggleThemeModeConfiguration);
+        refreshQuoteBtn.addEventListener('click', loadRandomMotivationalQuote);
+        startBtn.addEventListener('click', () => initiateExamRoutine(false));
+        resumeBtn.addEventListener('click', () => initiateExamRoutine(true));
+        fileUploadInput.addEventListener('change', handleNativeJSONFileUpload);
+        librarySaveBtn.addEventListener('click', saveActiveJSONToBrowserLibrary);
+        librarySelect.addEventListener('change', loadSelectedBankFromLibrary);
+        rangeStart.addEventListener('input', autoCalculateRecommendedTime);
+        rangeEnd.addEventListener('input', autoCalculateRecommendedTime);
+        examModeSelect.addEventListener('change', handleExamModeFieldToggleUI);
+        prevBtn.addEventListener('click', () => shiftActiveQuestionIndex(-1));
+        skipBtn.addEventListener('click', () => {
+            if (examMode !== 'poll') userAnswers[currentIndex] = null;
+            cacheStateToLocalStorage();
+            shiftActiveQuestionIndex(1);
         });
-    }
-</script>
+        nextBtn.addEventListener('click', () => shiftActiveQuestionIndex(1));
+        bookmarkToggleBtn.addEventListener('click', toggleSingleBookmarkState);
+        submitExamBtn.addEventListener('click', () => validateSubmissionRequestPrompt());
+        saveFileBtn.addEventListener('click', exportPerformanceReportToTextFile);
+        restartBtn.addEventListener('click', revertToHomeConsole);
+        profileToggleBtn.addEventListener('click', () => profileModal.classList.remove('hidden'));
+        closeProfileBtn.addEventListener('click', () => profileModal.classList.add('hidden'));
+        saveProfileBtn.addEventListener('click', saveProfileDetailsEngine);
+        profileModal.addEventListener('click', (e) => { if (e.target === profileModal) profileModal.classList.add('hidden'); });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker Registered!'))
+                    .catch(err => console.log('SW Registration failed:', err));
+            });
+        }
+    </script>
 </body>
 </html>
