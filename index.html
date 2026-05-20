@@ -2025,52 +2025,79 @@
         }
 
         function renderAnalyticsCharts(correct, wrong, skipped) {
-            const pieCtx = document.getElementById('pieChart')?.getContext('2d');
-            const barCtx = document.getElementById('barChart')?.getContext('2d');
-            if (pieChartInstance) pieChartInstance.destroy();
-            if (barChartInstance) barChartInstance.destroy();
+    const pieCtx = document.getElementById('pieChart')?.getContext('2d');
+    const barCtx = document.getElementById('barChart')?.getContext('2d');
+    if (pieChartInstance) pieChartInstance.destroy();
+    if (barChartInstance) barChartInstance.destroy();
 
-            if (pieCtx) {
-                pieChartInstance = new Chart(pieCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
-                        datasets: [{
-                            data: [correct, wrong, skipped],
-                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                            borderColor: 'var(--border-main)',
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom', labels: { color: 'var(--text-body)', font: { size: 11 } } } }
+    // 🔥 থিম অনুযায়ী সরাসরি রং নির্ধারণ
+    const isLight = document.body.classList.contains('light-theme');
+    const labelColor = isLight ? '#0f172a' : '#ffffff';   // টাইটেলের রং
+    const tickColor = isLight ? '#334155' : '#cbd5e1';    // বডি/মিউটেড রং
+
+    if (pieCtx) {
+        pieChartInstance = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
+                datasets: [{
+                    data: [correct, wrong, skipped],
+                    backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                    borderColor: isLight ? '#cbd5e1' : '#1e293b',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: labelColor,   // ✅ সরাসরি রং
+                            font: { size: 11 }
+                        }
                     }
-                });
+                }
             }
-            if (barCtx) {
-                barChartInstance = new Chart(barCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
-                        datasets: [{
-                            label: t('total_questions', { count: '' }),
-                            data: [correct, wrong, skipped],
-                            backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
-                            borderRadius: 8
-                        }]
+        });
+    }
+    if (barCtx) {
+        barChartInstance = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: [t('correct_badge'), t('wrong_badge'), t('skipped_badge')],
+                datasets: [{
+                    label: t('total_questions', { count: '' }),
+                    data: [correct, wrong, skipped],
+                    backgroundColor: ['#10b981', '#ef4444', '#f59e0b'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            color: tickColor,       // ✅ সরাসরি রং
+                        },
+                        grid: { color: isLight ? '#cbd5e1' : '#1e293b' }
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1, color: 'var(--text-muted)' }, grid: { color: 'var(--border-main)' } },
-                            x: { ticks: { color: 'var(--text-body)', font: { size: 10 } } } }
+                    x: {
+                        ticks: {
+                            color: labelColor,      // ✅ সরাসরি রং
+                            font: { size: 10 }
+                        }
                     }
-                });
+                }
             }
-        }
+        });
+    }
+}
 
         function renderReviewFeedDashboard() {
             reviewContainer.innerHTML = '';
